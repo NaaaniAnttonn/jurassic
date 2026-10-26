@@ -123,6 +123,9 @@
   color: var(--muted);
 }
 
+/* Le navigateur garde le défilement vertical ; le glissement horizontal change de période */
+.ag-swipe { touch-action: pan-y; }
+
 /* ---------- Vue mois (façon Google Agenda) ---------- */
 /* Mois et jour occupent toute la hauteur : plus de marge sous le contenu */
 .agenda.is-fill { padding-bottom: 0; }
@@ -227,7 +230,6 @@
   border: 1px solid var(--line);
   border-radius: var(--radius-lg);
   overflow: hidden;
-  touch-action: pan-y;
 }
 .ag-dv-allday {
   display: flex;

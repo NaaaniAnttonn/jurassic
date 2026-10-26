@@ -1,4 +1,4 @@
-import { useEffect, useLayoutEffect, useRef, useState, type MouseEvent, type TouchEvent } from 'react'
+import { useEffect, useLayoutEffect, useRef, useState, type MouseEvent } from 'react'
 import { useSpace } from '../../context/SpaceContext'
 import { fmtTime, sameDay, startOfDay } from './dates'
 import { dayLayout } from './layout'
@@ -15,14 +15,12 @@ type Props = {
   occurrences: Occurrence[]
   onOpen: (e: CalEvent) => void
   onAdd: (start: Date) => void
-  onMove: (dir: 1 | -1) => void
 }
 
-export default function DayView({ day, occurrences, onOpen, onAdd, onMove }: Props) {
+export default function DayView({ day, occurrences, onOpen, onAdd }: Props) {
   const { me, partner } = useSpace()
   const { ref, height } = useFillHeight<HTMLDivElement>()
   const scroller = useRef<HTMLDivElement>(null)
-  const touch = useRef<{ x: number; y: number } | null>(null)
   const [now, setNow] = useState(() => new Date())
   const { allDay, timed } = dayLayout(occurrences, day)
   const isToday = sameDay(day, now)
@@ -51,20 +49,8 @@ export default function DayView({ day, occurrences, onOpen, onAdd, onMove }: Pro
     onAdd(start)
   }
 
-  // Glisser vers la gauche / la droite : jour suivant / précédent
-  const onTouchStart = (e: TouchEvent) => {
-    touch.current = { x: e.touches[0].clientX, y: e.touches[0].clientY }
-  }
-  const onTouchEnd = (e: TouchEvent) => {
-    if (!touch.current) return
-    const dx = e.changedTouches[0].clientX - touch.current.x
-    const dy = e.changedTouches[0].clientY - touch.current.y
-    touch.current = null
-    if (Math.abs(dx) > 60 && Math.abs(dx) > Math.abs(dy) * 1.5) onMove(dx < 0 ? 1 : -1)
-  }
-
   return (
-    <div className="ag-dayview" ref={ref} style={{ height }} onTouchStart={onTouchStart} onTouchEnd={onTouchEnd}>
+    <div className="ag-dayview" ref={ref} style={{ height }}>
       {allDay.length > 0 && (
         <div className="ag-dv-allday">
           {allDay.map((o) => (

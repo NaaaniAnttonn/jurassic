@@ -1,4 +1,4 @@
-import { useCallback, useMemo, useState } from 'react'
+import { useCallback, useMemo, useRef, useState, type TouchEvent } from 'react'
 import { IconChevronLeft, IconChevronRight, IconPlus } from '../../components/Icons'
 import {
   addDays, addMonths, endOfDay, fmtMonthYear, fmtShort, fmtWeekRange, fmtWeekday, sameDay, startOfDay, startOfMonth, startOfWeek,
@@ -60,6 +60,19 @@ export default function AgendaPage() {
     [view],
   )
 
+  // Glisser vers la gauche / la droite : période suivante / précédente (jour, semaine ou mois)
+  const touch = useRef<{ x: number; y: number } | null>(null)
+  const onTouchStart = (e: TouchEvent) => {
+    touch.current = e.touches.length === 1 ? { x: e.touches[0].clientX, y: e.touches[0].clientY } : null
+  }
+  const onTouchEnd = (e: TouchEvent) => {
+    if (!touch.current) return
+    const dx = e.changedTouches[0].clientX - touch.current.x
+    const dy = e.changedTouches[0].clientY - touch.current.y
+    touch.current = null
+    if (Math.abs(dx) > 60 && Math.abs(dx) > Math.abs(dy) * 1.5) move(dx < 0 ? 1 : -1)
+  }
+
   const today = startOfDay(new Date())
   const newEventDate =
     view === 'day'
@@ -101,21 +114,22 @@ export default function AgendaPage() {
 
       {error && <p className="msg msg-error">Impossible de charger l’agenda : {error}</p>}
 
-      {loading ? (
-        <p className="muted ag-loading">Chargement de l’agenda…</p>
-      ) : view === 'day' ? (
-        <DayView
-          day={cursor}
-          occurrences={occurrences}
-          onOpen={openEvent}
-          onAdd={(start) => setSheet({ event: null, date: start, timed: true })}
-          onMove={move}
-        />
-      ) : view === 'week' ? (
-        <WeekView weekStart={weekStart} occurrences={occurrences} onOpen={openEvent} onAdd={(d) => setSheet({ event: null, date: d })} />
-      ) : (
-        <MonthView month={cursor} occurrences={occurrences} onPick={pickDay} />
-      )}
+      <div className="ag-swipe" onTouchStart={onTouchStart} onTouchEnd={onTouchEnd}>
+        {loading ? (
+          <p className="muted ag-loading">Chargement de l’agenda…</p>
+        ) : view === 'day' ? (
+          <DayView
+            day={cursor}
+            occurrences={occurrences}
+            onOpen={openEvent}
+            onAdd={(start) => setSheet({ event: null, date: start, timed: true })}
+          />
+        ) : view === 'week' ? (
+          <WeekView weekStart={weekStart} occurrences={occurrences} onOpen={openEvent} onAdd={(d) => setSheet({ event: null, date: d })} />
+        ) : (
+          <MonthView month={cursor} occurrences={occurrences} onPick={pickDay} />
+        )}
+      </div>
 
       <button className="fab" onClick={() => setSheet({ event: null, date: newEventDate })} aria-label="Nouvel événement">
         <IconPlus size={28} />
