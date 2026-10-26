@@ -1,3 +1,4 @@
+import type { CSSProperties } from 'react'
 import type { Profile } from '../../lib/supabase'
 import type { CalEvent } from './types'
 
@@ -22,4 +23,14 @@ export function barStyle(colors: string[]) {
   return colors.length > 1
     ? { background: `linear-gradient(to bottom, ${colors[0]} 50%, ${colors[1]} 50%)` }
     : { background: colors[0] }
+}
+
+/** Étiquette pleine à la couleur de la personne ; « Vous deux » : liseré de l'autre couleur ;
+ *  événement importé : teinte claire, pour le distinguer d'un coup d'œil */
+export function chipStyle(colors: string[], external: boolean): CSSProperties {
+  const [c1, c2] = colors
+  if (external) {
+    return { background: `color-mix(in srgb, ${c1} var(--chip-tint), var(--surface))`, color: 'var(--text)', boxShadow: `inset 3px 0 0 ${c1}` }
+  }
+  return { background: c1, color: '#fff', boxShadow: c2 ? `inset 4px 0 0 ${c2}` : undefined }
 }

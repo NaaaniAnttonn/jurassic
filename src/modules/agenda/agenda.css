@@ -1,3 +1,7 @@
+/* Teinte des événements importés (plus marquée en sombre) */
+:root { --chip-tint: 20%; }
+@media (prefers-color-scheme: dark) { :root { --chip-tint: 32%; } }
+
 /* Place pour le bouton + au-dessus des onglets */
 .agenda { padding-bottom: 72px; }
 
@@ -7,12 +11,18 @@
   align-items: center;
   justify-content: space-between;
   gap: 12px;
-  margin-bottom: 18px;
+  margin-bottom: 12px;
   flex-wrap: wrap;
 }
-.segmented-compact { margin: 0; background: var(--surface); border: 1px solid var(--line); }
-.segmented-compact button { padding: 7px 14px; }
-.segmented-compact button[aria-selected='true'] { background: var(--fern); color: var(--fern-ink); box-shadow: none; }
+/* .segmented.segmented-compact : doit l'emporter sur .segmented (index.css est chargé après) */
+.segmented.segmented-compact {
+  margin: 0;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  grid-template-columns: repeat(3, auto);
+}
+.segmented.segmented-compact button { padding: 7px 12px; }
+.segmented.segmented-compact button[aria-selected='true'] { background: var(--fern); color: var(--fern-ink); box-shadow: none; }
 
 .ag-nav { display: flex; align-items: center; gap: 2px; }
 .ag-period {
@@ -113,51 +123,190 @@
   color: var(--muted);
 }
 
-/* ---------- Vue mois ---------- */
-.ag-grid {
-  display: grid;
-  grid-template-columns: repeat(7, 1fr);
-  gap: 4px;
+/* ---------- Vue mois (façon Google Agenda) ---------- */
+/* Mois et jour occupent toute la hauteur : plus de marge sous le contenu */
+.agenda.is-fill { padding-bottom: 0; }
+.content:has(.agenda.is-fill) { padding-bottom: 0; }
+
+.ag-month {
+  display: flex;
+  flex-direction: column;
   background: var(--surface);
   border: 1px solid var(--line);
   border-radius: var(--radius-lg);
-  padding: 10px 8px;
+  overflow: hidden;
+  margin-inline: -8px; /* un peu plus de largeur pour les titres */
 }
-.ag-grid-head {
+.ag-mhead {
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  height: 22px;
+  align-items: center;
   text-align: center;
-  font-size: 0.78rem;
+  font-size: 0.72rem;
   font-weight: 600;
   color: var(--muted);
-  text-decoration: none;
-  padding-bottom: 4px;
 }
-.ag-cell {
+.ag-mhead abbr { text-decoration: none; }
+.ag-mweeks { flex: 1; display: grid; min-height: 0; }
+.ag-mweek {
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  border-top: 1px solid var(--line);
+  min-height: 0;
+}
+.ag-mcell {
   border: 0;
+  border-left: 1px solid var(--line);
   background: transparent;
-  aspect-ratio: 1 / 1.05;
-  border-radius: 12px;
+  padding: 3px 0 0;
   display: flex;
-  flex-direction: column;
-  align-items: center;
   justify-content: center;
-  gap: 3px;
+  align-items: flex-start;
   cursor: pointer;
   font-variant-numeric: tabular-nums;
+  min-width: 0;
 }
-.ag-cell-num { font-weight: 600; }
-.ag-cell.is-out { opacity: 0.35; }
-.ag-cell.is-today .ag-cell-num { color: var(--fern); font-weight: 800; }
-.ag-cell.is-selected { background: var(--fern); }
-.ag-cell.is-selected .ag-cell-num { color: var(--fern-ink); }
-.ag-dots { display: flex; gap: 3px; height: 6px; }
-.ag-dots i { width: 6px; height: 6px; border-radius: 50%; }
-.ag-cell.is-selected .ag-dots i { box-shadow: 0 0 0 1.5px var(--fern-ink); }
+.ag-mcell:first-child { border-left: 0; }
+.ag-mcell:active { background: color-mix(in srgb, var(--moss) 14%, transparent); }
+.ag-mnum {
+  display: grid;
+  place-items: center;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+.ag-mcell.is-out .ag-mnum { color: var(--muted); opacity: 0.6; }
+.ag-mcell.is-today .ag-mnum { background: var(--fern); color: var(--fern-ink); font-weight: 800; }
 @media (prefers-color-scheme: dark) {
-  .ag-cell.is-today .ag-cell-num { color: var(--moss); }
+  .ag-mcell.is-today .ag-mnum { background: var(--moss); color: var(--bg); }
 }
 
-.ag-selected { margin-top: 20px; }
-.ag-selected-title { font-size: 1.15rem; margin-bottom: 10px; }
+/* Étiquettes posées par-dessus les cases (les touchers passent aux cases) */
+.ag-mlayer {
+  position: absolute;
+  inset: 24px 0 0;
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  grid-auto-rows: 16px;
+  row-gap: 2px;
+  pointer-events: none;
+  overflow: hidden;
+}
+.ag-chip {
+  min-width: 0;
+  margin: 0 2px;
+  padding: 0 4px;
+  border-radius: 4px;
+  font-size: 0.68rem;
+  font-weight: 600;
+  line-height: 16px;
+  white-space: nowrap;
+  overflow: hidden;
+}
+/* Barre continue : pas d'arrondi ni de marge du côté où elle se poursuit */
+.ag-chip.cont-before { margin-left: 0; border-top-left-radius: 0; border-bottom-left-radius: 0; }
+.ag-chip.cont-after { margin-right: 0; border-top-right-radius: 0; border-bottom-right-radius: 0; }
+.ag-more {
+  margin: 0 2px;
+  padding: 0 4px;
+  font-size: 0.68rem;
+  font-weight: 700;
+  line-height: 16px;
+  color: var(--muted);
+}
+
+/* ---------- Vue jour ---------- */
+.ag-dayview {
+  display: flex;
+  flex-direction: column;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  touch-action: pan-y;
+}
+.ag-dv-allday {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  padding: 6px 8px 6px 52px;
+  border-bottom: 1px solid var(--line);
+  max-height: 30%;
+  overflow-y: auto;
+}
+.ag-chip.ag-dv-allday-chip {
+  border: 0;
+  margin: 0;
+  flex: 1 1 100%;
+  text-align: left;
+  font-size: 0.8rem;
+  line-height: 1.5;
+  padding: 2px 8px;
+  cursor: pointer;
+}
+.ag-dv-scroll { flex: 1; overflow-y: auto; overscroll-behavior: contain; min-height: 0; }
+.ag-dv-grid { position: relative; margin: 10px 0; }
+.ag-dv-hour {
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 0;
+  border-top: 1px solid var(--line);
+  margin-left: 48px;
+}
+.ag-dv-hour:first-child { border-top-color: transparent; }
+.ag-dv-hour span {
+  position: absolute;
+  left: -46px;
+  top: -0.6em;
+  width: 40px;
+  text-align: right;
+  font-size: 0.7rem;
+  color: var(--muted);
+  font-variant-numeric: tabular-nums;
+}
+.ag-dv-slots { position: absolute; inset: 0 6px 0 50px; cursor: pointer; }
+.ag-dv-event {
+  position: absolute;
+  border: 0;
+  border-radius: 6px;
+  padding: 3px 6px;
+  text-align: left;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  cursor: pointer;
+  font-size: 0.78rem;
+  line-height: 1.25;
+  outline: 1px solid var(--surface); /* sépare les événements côte à côte */
+}
+.ag-dv-event-title { font-weight: 700; overflow-wrap: anywhere; }
+.ag-dv-event-time { opacity: 0.85; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.ag-dv-event.is-short { flex-direction: row; gap: 6px; align-items: center; padding-block: 0; white-space: nowrap; }
+.ag-dv-event.is-short .ag-dv-event-title { overflow: hidden; text-overflow: ellipsis; overflow-wrap: normal; }
+.ag-dv-now {
+  position: absolute;
+  left: -4px;
+  right: 0;
+  height: 2px;
+  background: var(--danger);
+  pointer-events: none;
+  z-index: 1;
+}
+.ag-dv-now::before {
+  content: '';
+  position: absolute;
+  left: -5px;
+  top: -4px;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--danger);
+}
 
 /* ---------- Bouton + ---------- */
 .fab {

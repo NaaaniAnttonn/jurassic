@@ -31,7 +31,7 @@ type Form = {
   isPrivate: boolean
 }
 
-function initialForm(ev: CalEvent | null, date: Date, me: Profile | null, partner: Profile | null): Form {
+function initialForm(ev: CalEvent | null, date: Date, me: Profile | null, partner: Profile | null, timed = false): Form {
   if (ev) {
     const s = new Date(ev.start_at)
     const e = new Date(ev.end_at)
@@ -55,11 +55,8 @@ function initialForm(ev: CalEvent | null, date: Date, me: Profile | null, partne
   }
   const now = new Date()
   const start = new Date(date)
-  if (sameDay(date, now)) {
-    start.setHours(now.getHours() + 1, 0, 0, 0)
-  } else {
-    start.setHours(9, 0, 0, 0)
-  }
+  // Créneau touché dans la vue Jour : on garde l'heure
+  if (!timed) start.setHours(sameDay(date, now) ? now.getHours() + 1 : 9, 0, 0, 0)
   const end = new Date(start.getTime() + 3_600_000)
   return {
     title: '', allDay: false,
@@ -70,11 +67,11 @@ function initialForm(ev: CalEvent | null, date: Date, me: Profile | null, partne
   }
 }
 
-type Props = { event: CalEvent | null; date: Date; onClose: () => void; onSaved: () => void }
+type Props = { event: CalEvent | null; date: Date; timed?: boolean; onClose: () => void; onSaved: () => void }
 
-export default function EventSheet({ event, date, onClose, onSaved }: Props) {
+export default function EventSheet({ event, date, timed, onClose, onSaved }: Props) {
   const { space, me, partner } = useSpace()
-  const [f, setF] = useState<Form>(() => initialForm(event, date, me, partner))
+  const [f, setF] = useState<Form>(() => initialForm(event, date, me, partner, timed))
   const [busy, setBusy] = useState(false)
   const [error, setError] = useState('')
   const isNew = !event
