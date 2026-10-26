@@ -301,3 +301,25 @@ textarea {
 textarea { resize: vertical; }
 .sheet input:not([role='switch']):not(.sheet-title-input) { background: var(--surface); }
 .small { font-size: 0.88rem; }
+
+/* ---------- Agendas importés ---------- */
+.ag-event-source { font-style: italic; }
+.ext-title { font-size: 1.4rem; margin: 4px 2px 0; overflow-wrap: anywhere; }
+.ext-kv { margin: 12px 0 8px; }
+.ext-kv dd { overflow-wrap: anywhere; }
+.ext-notes { white-space: pre-wrap; overflow-wrap: anywhere; margin: 4px 0 12px; }
+
+/* ---------- Réglages : synchro des agendas ---------- */
+.sync-intro { margin: 0 0 14px; }
+.sync-link { font-size: 0.85rem; font-family: ui-monospace, monospace; }
+.sync-list { list-style: none; margin: 0 0 16px; padding: 0; display: flex; flex-direction: column; gap: 10px; }
+.sync-item { border: 1px solid var(--line); border-radius: var(--radius-sm); padding: 10px 12px; }
+.sync-item-head { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+.sync-item-name { font-weight: 700; overflow-wrap: anywhere; }
+.sync-status { font-size: 0.85rem; color: var(--muted); margin: 2px 0 0; }
+.sync-status.is-error { color: var(--danger); }
+.sync-item .switch-row { padding: 8px 0 0; font-weight: 500; }
+.sync-help { margin: 4px 0 14px; }
+.sync-help summary { cursor: pointer; font-weight: 600; color: var(--muted); }
+.sync-help ol { margin: 8px 0 0; padding-left: 20px; display: flex; flex-direction: column; gap: 4px; }
+.sync-help p { margin: 10px 0 0; font-weight: 600; }

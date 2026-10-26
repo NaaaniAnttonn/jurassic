@@ -6,6 +6,7 @@ import { useEvents } from './useEvents'
 import WeekView from './WeekView'
 import MonthView from './MonthView'
 import EventSheet from './EventSheet'
+import ExternalEventSheet from './ExternalEventSheet'
 import type { CalEvent } from './types'
 import './agenda.css'
 
@@ -96,7 +97,11 @@ export default function AgendaPage() {
         <IconPlus size={28} />
       </button>
 
-      {sheet && <EventSheet event={sheet.event} date={sheet.date} onClose={closeSheet} onSaved={reload} />}
+      {sheet?.event?.external ? (
+        <ExternalEventSheet event={sheet.event} onClose={closeSheet} />
+      ) : (
+        sheet && <EventSheet event={sheet.event} date={sheet.date} onClose={closeSheet} onSaved={reload} />
+      )}
     </div>
   )
 }

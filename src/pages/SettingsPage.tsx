@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import { useAuth } from '../context/AuthContext'
 import { useSpace } from '../context/SpaceContext'
 import InstallHint from '../components/InstallHint'
+import CalendarSync from '../modules/agenda/CalendarSync'
 import { disablePush, enablePush, getPushState, sendPush, type PushState } from '../lib/push'
 import { errorMessage, supabase } from '../lib/supabase'
 
@@ -131,6 +132,8 @@ export default function SettingsPage() {
           </>
         )}
       </section>
+
+      <CalendarSync onMessage={flash} />
 
       <section className="card">
         <h2>Installer l’app</h2>

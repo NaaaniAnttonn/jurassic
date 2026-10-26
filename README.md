@@ -108,3 +108,36 @@ Vercel redéploie tout seul.
 - Modifier ou supprimer un événement répété s'applique à toute la série.
 - Les rappels partent pour les personnes concernées par l'événement (fuseau Europe/Paris).
 - Pour une journée entière, le rappel est calé sur 9 h (le jour même ou la veille).
+
+---
+
+# Étape 3 : synchro Google Agenda / iCloud
+
+En lecture seule, dans les deux sens :
+- **Export** : chacun a un lien d'abonnement iCal personnel (Réglages → « Voir Jurassic dans ton agenda »)
+  à ajouter dans Google Agenda ou le Calendrier de l'iPhone. Il contient les événements Jurassic
+  (+ tes privés) et les agendas importés par l'autre ; ce qui ne te concerne pas est préfixé du prénom.
+- **Import** : chacun colle l'adresse iCal de son agenda (Google : « Adresse secrète au format iCal » ;
+  iCloud : lien de « Calendrier public ») dans Réglages → « Importer ton agenda ».
+  Les événements apparaissent dans Jurassic en lecture seule, visibles par l'autre si on le souhaite.
+
+## Mise en place
+
+1. **Base de données** : SQL Editor → colle `supabase/migrations/0004_synchro_agendas.sql` → Run.
+
+2. **Fonctions** :
+```bash
+npx supabase functions deploy calendar-feed --no-verify-jwt --use-api
+npx supabase functions deploy sync-calendars --no-verify-jwt --use-api
+```
+
+3. **Import toutes les 15 minutes** : ouvre `supabase/migrations/0005_synchro_cron.sql`, remplace
+   `REMPLACE_PAR_TON_SECRET` par le même secret que pour les rappels, colle-le dans le SQL Editor → Run.
+
+4. **Mise en ligne** : `git add . && git commit -m "Étape 3 : synchro agendas" && git push`.
+
+## Bon à savoir
+- Google rafraîchit les agendas auxquels il est abonné quand il veut (souvent plusieurs heures) ;
+  l'iPhone est bien plus rapide. On ne peut pas forcer Google.
+- Import : on garde les occurrences d'un mois en arrière à un an en avant.
+- « Créer un nouveau lien » invalide l'ancien (à faire si le lien a fuité).

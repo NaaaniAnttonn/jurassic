@@ -27,6 +27,7 @@ export default function EventCard({ occ, day, onOpen }: { occ: Occurrence; day: 
         <span className="ag-event-title">{event.title}</span>
         <span className="ag-event-meta">
           <span>{whoLabel(event, me, partner)}</span>
+          {event.external && <span className="ag-event-source">{event.external.calendarName}</span>}
           {event.location && <span>{event.location}</span>}
           {event.recurrence && <IconRepeat size={14} />}
           {event.reminder_minutes !== null && <IconBell size={14} />}
