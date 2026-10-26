@@ -1,4 +1,4 @@
-# Jurassic — étape 1 (socle)
+# Jurassic
 
 Comptes, espace couple avec code d'invitation, app installable (PWA) et notifications push.
 Stack : Vite + React + TypeScript · Supabase · Vercel.
@@ -74,3 +74,37 @@ supabase/
   migrations/   tables, sécurité RLS, fonctions create/join/leave_space
   functions/    send-push (envoi des notifications)
 ```
+
+---
+
+# Étape 2 : agenda partagé
+
+Vues semaine et mois, événements pour toi / elle / vous deux, répétitions, événements privés,
+rappels par notification, notification à l'autre quand un événement le concerne, temps réel.
+
+## Mise en place
+
+1. **Base de données** : Supabase → SQL Editor → colle `supabase/migrations/0002_agenda.sql` → Run.
+
+2. **Fonction des rappels** : choisis un secret (une longue suite de lettres et chiffres), puis :
+```bash
+npx supabase secrets set CRON_SECRET=TON_SECRET
+npx supabase functions deploy send-reminders --no-verify-jwt --use-api
+```
+
+3. **Déclenchement chaque minute** : ouvre `supabase/migrations/0003_rappels_cron.sql`,
+   remplace `REMPLACE_PAR_TON_SECRET` par ton secret, puis colle-le dans le SQL Editor → Run.
+   Si une erreur parle de `pg_cron` ou `pg_net`, active-les dans Database → Extensions puis relance.
+
+4. **Mise en ligne** :
+```bash
+git add .
+git commit -m "Étape 2 : agenda"
+git push
+```
+Vercel redéploie tout seul.
+
+## Bon à savoir
+- Modifier ou supprimer un événement répété s'applique à toute la série.
+- Les rappels partent pour les personnes concernées par l'événement (fuseau Europe/Paris).
+- Pour une journée entière, le rappel est calé sur 9 h (le jour même ou la veille).

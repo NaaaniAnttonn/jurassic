@@ -20,3 +20,21 @@ export const IconReglages = ({ size }: P) => (
 export const IconShare = ({ size }: P) => (
   <svg {...base(size)}><path d="M12 3v12M7.5 7.5L12 3l4.5 4.5" /><path d="M5 12v6.5A2.5 2.5 0 0 0 7.5 21h9a2.5 2.5 0 0 0 2.5-2.5V12" /></svg>
 )
+export const IconPlus = ({ size }: P) => (
+  <svg {...base(size)}><path d="M12 5v14M5 12h14" /></svg>
+)
+export const IconChevronLeft = ({ size }: P) => (
+  <svg {...base(size)}><path d="M15 5l-7 7 7 7" /></svg>
+)
+export const IconChevronRight = ({ size }: P) => (
+  <svg {...base(size)}><path d="M9 5l7 7-7 7" /></svg>
+)
+export const IconRepeat = ({ size }: P) => (
+  <svg {...base(size)}><path d="M17 2.5l3 3-3 3" /><path d="M4 11.5v-1a5 5 0 0 1 5-5h11" /><path d="M7 21.5l-3-3 3-3" /><path d="M20 12.5v1a5 5 0 0 1-5 5H4" /></svg>
+)
+export const IconLock = ({ size }: P) => (
+  <svg {...base(size)}><rect x="4.5" y="10.5" width="15" height="10" rx="2.5" /><path d="M8 10.5V7.5a4 4 0 0 1 8 0v3" /></svg>
+)
+export const IconBell = ({ size }: P) => (
+  <svg {...base(size)}><path d="M6 16.5V11a6 6 0 0 1 12 0v5.5l1.5 2h-15z" /><path d="M10 21h4" /></svg>
+)
