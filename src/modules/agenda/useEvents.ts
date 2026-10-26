@@ -17,7 +17,7 @@ export function useEvents() {
       supabase.from('events').select('*').eq('space_id', spaceId).order('start_at'),
       supabase
         .from('external_events')
-        .select('id, space_id, user_id, calendar_name, title, location, notes, start_at, end_at, all_day')
+        .select('id, space_id, user_id, calendar_name, start_at, end_at, all_day, external_event_details(title, location, notes)')
         .eq('space_id', spaceId),
     ])
     if (own.error) setError(own.error.message)

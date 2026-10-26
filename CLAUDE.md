@@ -36,12 +36,15 @@ Interface et code commentés **en français**. Le README détaille la mise en pl
    Rappels : pg_cron (migration 0003) appelle chaque minute `send-reminders` (déployée
    `--no-verify-jwt`, protégée par l'en-tête `x-cron-secret`), dédoublonnage via `reminder_log`,
    fuseau Europe/Paris. Modifier/supprimer un événement répété agit sur toute la série.
-3. **Synchro Google / iCloud** (lecture seule, migrations 0004 + 0005) :
+3. **Synchro Google / iCloud** (lecture seule, migrations 0004 à 0006) :
    - Export : `calendar-feed?token=…` sert un .ics par personne (jeton dans `calendar_feeds`, RPC
      `feed_token(p_regenerate)`). Répétitions en RRULE avec `TZID=Europe/Paris`.
    - Import : `external_calendars` (URL secrète, RLS propriétaire seul) → `sync-calendars` (cron 15 min
      ou appel depuis l'appli) parse avec ical.js, déplie les occurrences (−31 j / +366 j) et les écrit
      dans `external_events` via la RPC `replace_external_events` (sautée si le hash n'a pas changé).
+   - Visibilité par agenda (migration 0006) : `visibility` = details | busy | hidden. Titre/lieu/notes sont
+     dans `external_event_details`, dont la RLS ne les renvoie à l'autre qu'en `details` ; sinon le client
+     affiche « Occupé ». Ne jamais remettre ces champs dans `external_events` (lisible par l'autre).
    - Côté client, les `external_events` deviennent des `CalEvent` avec `external` (fiche en lecture seule).
    - Code iCal pur dans `*/ics.ts` (testable avec Node + esbuild), fuseau Paris dans `_shared/paris.ts`.
 4. **Listes** et **Tâches** : encore des pages vides (`modules/listes`, `modules/todo`).

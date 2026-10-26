@@ -119,7 +119,9 @@ En lecture seule, dans les deux sens :
   (+ tes privés) et les agendas importés par l'autre ; ce qui ne te concerne pas est préfixé du prénom.
 - **Import** : chacun colle l'adresse iCal de son agenda (Google : « Adresse secrète au format iCal » ;
   iCloud : lien de « Calendrier public ») dans Réglages → « Importer ton agenda ».
-  Les événements apparaissent dans Jurassic en lecture seule, visibles par l'autre si on le souhaite.
+  Les événements apparaissent dans Jurassic en lecture seule. Pour chaque agenda, on choisit ce que
+  l'autre en voit : **Détails** (titre, lieu, notes), **Occupé** (créneaux seulement) ou **Masqué**.
+  Le même choix s'applique à ce que reçoit son lien d'abonnement.
 
 ## Mise en place
 
@@ -134,7 +136,10 @@ npx supabase functions deploy sync-calendars --no-verify-jwt --use-api
 3. **Import toutes les 15 minutes** : ouvre `supabase/migrations/0005_synchro_cron.sql`, remplace
    `REMPLACE_PAR_TON_SECRET` par le même secret que pour les rappels, colle-le dans le SQL Editor → Run.
 
-4. **Mise en ligne** : `git add . && git commit -m "Étape 3 : synchro agendas" && git push`.
+4. **Visibilité Détails / Occupé / Masqué** : SQL Editor → colle `supabase/migrations/0006_visibilite_agendas.sql` → Run,
+   puis redéploie `calendar-feed` (commande ci-dessus).
+
+5. **Mise en ligne** : `git add . && git commit -m "Étape 3 : synchro agendas" && git push`.
 
 ## Bon à savoir
 - Google rafraîchit les agendas auxquels il est abonné quand il veut (souvent plusieurs heures) ;

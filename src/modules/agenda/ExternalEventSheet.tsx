@@ -46,7 +46,9 @@ export default function ExternalEventSheet({ event, onClose }: { event: CalEvent
           </dl>
           {event.notes && <p className="ext-notes">{event.notes}</p>}
           <p className="muted small">
-            {mine
+            {event.external?.busy
+              ? `${partner?.display_name ?? 'L’autre'} ne partage que ses disponibilités pour cet agenda.`
+              : mine
               ? 'Pour le modifier, passe par ton agenda d’origine : Jurassic se met à jour tout seul (environ toutes les 15 minutes).'
               : `Cet événement vient de l’agenda de ${partner?.display_name ?? 'ton/ta partenaire'}.`}
           </p>

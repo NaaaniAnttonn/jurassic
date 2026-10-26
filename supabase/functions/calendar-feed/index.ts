@@ -5,6 +5,8 @@ import { buildCalendar, type FeedEvent } from './ics.ts'
 
 const YEAR_MS = 365 * 86_400_000
 
+type Details = { title: string; location: string | null; notes: string | null }
+
 Deno.serve(async (req) => {
   const token = new URL(req.url).searchParams.get('token') ?? ''
   if (!/^[0-9a-f]{64}$/.test(token)) return new Response('Lien invalide', { status: 404 })
@@ -37,12 +39,12 @@ Deno.serve(async (req) => {
     .or(`is_private.eq.false,created_by.eq.${userId}`)
   if (error) return new Response(error.message, { status: 500 })
 
-  // Agendas importés par l'autre (les siens sont déjà dans son propre agenda)
+  // Agendas importés par l'autre (les siens sont déjà dans son propre agenda) ; « busy » = créneau sans détails
   const { data: imported } = await admin
     .from('external_events')
-    .select('id, calendar_id, uid, title, location, notes, start_at, end_at, all_day, user_id')
+    .select('id, calendar_id, uid, start_at, end_at, all_day, user_id, visibility, external_event_details(title, location, notes)')
     .eq('space_id', spaceId)
-    .eq('shared', true)
+    .in('visibility', ['details', 'busy'])
     .neq('user_id', userId)
     .gte('end_at', since)
 
@@ -59,18 +61,22 @@ Deno.serve(async (req) => {
       recurrence_until: e.recurrence_until,
       updated_at: e.updated_at,
     })),
-    ...(imported ?? []).map((e) => ({
-      uid: `${e.calendar_id}-${e.start_at}-${e.uid}@jurassic-import`,
-      title: label(e.title, [e.user_id]),
-      location: e.location,
-      notes: e.notes,
-      start_at: e.start_at,
-      end_at: e.end_at,
-      all_day: e.all_day,
-      recurrence: null,
-      recurrence_until: null,
-      updated_at: e.start_at,
-    })),
+    ...(imported ?? []).map((e) => {
+      const raw = e.external_event_details as unknown as Details | Details[] | null
+      const d = e.visibility === 'details' ? (Array.isArray(raw) ? raw[0] : raw) : null
+      return {
+        uid: `${e.calendar_id}-${e.start_at}-${e.uid}@jurassic-import`,
+        title: label(d?.title ?? 'Occupé', [e.user_id]),
+        location: d?.location ?? null,
+        notes: d?.notes ?? null,
+        start_at: e.start_at,
+        end_at: e.end_at,
+        all_day: e.all_day,
+        recurrence: null,
+        recurrence_until: null,
+        updated_at: e.start_at,
+      }
+    }),
   ]
 
   return new Response(buildCalendar(spaceName, feedEvents), {

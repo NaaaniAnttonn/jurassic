@@ -1,12 +1,13 @@
 import { useCallback, useEffect, useState, type FormEvent } from 'react'
 import { useSpace } from '../../context/SpaceContext'
 import { errorMessage, supabase } from '../../lib/supabase'
+import { VISIBILITY_LABELS, type Visibility } from './types'
 import './agenda.css'
 
 type ExternalCalendar = {
   id: string
   name: string
-  shared: boolean
+  visibility: Visibility
   last_synced_at: string | null
   last_error: string | null
 }
@@ -14,6 +15,28 @@ type ExternalCalendar = {
 type Props = { onMessage: (type: 'info' | 'error', text: string) => void }
 
 const FEED_BASE = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/calendar-feed?token=`
+const VISIBILITY_HINTS: Record<Visibility, string> = {
+  details: 'titre, lieu et notes',
+  busy: 'seulement tes créneaux, affichés « Occupé »',
+  hidden: 'rien de cet agenda',
+}
+
+function VisibilityPicker({ value, onChange, who }: { value: Visibility; onChange: (v: Visibility) => void; who: string }) {
+  return (
+    <div className="field">
+      <span>Ce que voit {who}</span>
+      <div className="chips" role="radiogroup" aria-label={`Ce que voit ${who}`}>
+        {(Object.keys(VISIBILITY_LABELS) as Visibility[]).map((v) => (
+          <button key={v} type="button" role="radio" aria-checked={value === v} className="chip" onClick={() => onChange(v)}>
+            {VISIBILITY_LABELS[v]}
+          </button>
+        ))}
+      </div>
+      <small className="sync-status">{who.charAt(0).toUpperCase() + who.slice(1)} voit {VISIBILITY_HINTS[value]}.</small>
+    </div>
+  )
+}
+
 const fmtSync = (iso: string) =>
   new Intl.DateTimeFormat('fr-FR', { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' }).format(new Date(iso))
 
@@ -30,6 +53,8 @@ export default function CalendarSync({ onMessage }: Props) {
   const [calendars, setCalendars] = useState<ExternalCalendar[]>([])
   const [name, setName] = useState('')
   const [url, setUrl] = useState('')
+  const [visibility, setVisibility] = useState<Visibility>('busy')
+  const who = partner?.display_name ?? 'l’autre'
   const [busy, setBusy] = useState(false)
 
   const feedUrl = token ? FEED_BASE + token : ''
@@ -38,7 +63,7 @@ export default function CalendarSync({ onMessage }: Props) {
   const loadCalendars = useCallback(async () => {
     const { data } = await supabase
       .from('external_calendars')
-      .select('id, name, shared, last_synced_at, last_error')
+      .select('id, name, visibility, last_synced_at, last_error')
       .order('created_at')
     setCalendars((data as ExternalCalendar[]) ?? [])
   }, [])
@@ -82,7 +107,7 @@ export default function CalendarSync({ onMessage }: Props) {
     setBusy(true)
     const { data, error } = await supabase
       .from('external_calendars')
-      .insert({ space_id: space.id, user_id: me.id, name: name.trim() || 'Mon agenda', url: link })
+      .insert({ space_id: space.id, user_id: me.id, name: name.trim() || 'Mon agenda', url: link, visibility })
       .select('id')
       .single()
     if (error) {
@@ -111,9 +136,9 @@ export default function CalendarSync({ onMessage }: Props) {
     setBusy(false)
   }
 
-  const toggleShared = async (cal: ExternalCalendar, shared: boolean) => {
-    setCalendars((list) => list.map((c) => (c.id === cal.id ? { ...c, shared } : c)))
-    const { error } = await supabase.from('external_calendars').update({ shared }).eq('id', cal.id)
+  const changeVisibility = async (cal: ExternalCalendar, visibility: Visibility) => {
+    setCalendars((list) => list.map((c) => (c.id === cal.id ? { ...c, visibility } : c)))
+    const { error } = await supabase.from('external_calendars').update({ visibility }).eq('id', cal.id)
     if (error) {
       onMessage('error', errorMessage(error))
       loadCalendars()
@@ -186,12 +211,7 @@ export default function CalendarSync({ onMessage }: Props) {
                 ) : (
                   <p className="sync-status">{cal.last_synced_at ? `À jour le ${fmtSync(cal.last_synced_at)}` : 'En attente de synchronisation'}</p>
                 )}
-                {partner && (
-                  <label className="switch-row">
-                    <span>Visible par {partner.display_name}</span>
-                    <input type="checkbox" role="switch" checked={cal.shared} onChange={(e) => toggleShared(cal, e.target.checked)} />
-                  </label>
-                )}
+                <VisibilityPicker value={cal.visibility} onChange={(v) => changeVisibility(cal, v)} who={who} />
               </li>
             ))}
           </ul>
@@ -206,6 +226,7 @@ export default function CalendarSync({ onMessage }: Props) {
             <span>Adresse iCal de l’agenda</span>
             <input value={url} onChange={(e) => setUrl(e.target.value)} placeholder="https://… ou webcal://…" inputMode="url" autoCapitalize="off" autoCorrect="off" required />
           </label>
+          <VisibilityPicker value={visibility} onChange={setVisibility} who={who} />
           <details className="sync-help">
             <summary>Où trouver cette adresse ?</summary>
             <p>Google Agenda (sur ordinateur)</p>

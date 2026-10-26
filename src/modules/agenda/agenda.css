@@ -318,8 +318,8 @@ textarea { resize: vertical; }
 .sync-item-name { font-weight: 700; overflow-wrap: anywhere; }
 .sync-status { font-size: 0.85rem; color: var(--muted); margin: 2px 0 0; }
 .sync-status.is-error { color: var(--danger); }
-.sync-item .switch-row { padding: 8px 0 0; font-weight: 500; }
 .sync-help { margin: 4px 0 14px; }
 .sync-help summary { cursor: pointer; font-weight: 600; color: var(--muted); }
 .sync-help ol { margin: 8px 0 0; padding-left: 20px; display: flex; flex-direction: column; gap: 4px; }
 .sync-help p { margin: 10px 0 0; font-weight: 600; }
+.sync-item .field { margin: 10px 0 0; }
