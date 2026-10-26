@@ -1,0 +1,30 @@
+# Évite la mise en pause du projet Supabase gratuit (après 7 jours sans activité) :
+# une simple lecture via l'API REST le lundi et le jeudi.
+name: Réveil Supabase
+
+on:
+  schedule:
+    - cron: '0 6 * * 1,4' # lundi et jeudi, 6 h UTC
+  workflow_dispatch: # bouton « Run workflow » pour tester à la main
+
+jobs:
+  ping:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Lecture via l'API REST
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_ANON_KEY: ${{ secrets.SUPABASE_ANON_KEY }}
+        run: |
+          if [ -z "$SUPABASE_URL" ] || [ -z "$SUPABASE_ANON_KEY" ]; then
+            echo "::error::Secrets SUPABASE_URL et/ou SUPABASE_ANON_KEY manquants"
+            exit 1
+          fi
+          # Sans connexion, la RLS renvoie une liste vide : la requête touche quand même la base
+          status=$(curl -sS -o /dev/null -w '%{http_code}' --retry 3 --retry-delay 10 \
+            "${SUPABASE_URL%/}/rest/v1/spaces?select=id&limit=1" \
+            -H "apikey: $SUPABASE_ANON_KEY" \
+            -H "Authorization: Bearer $SUPABASE_ANON_KEY")
+          echo "Réponse de Supabase : HTTP $status"
+          [ "$status" = "200" ]
