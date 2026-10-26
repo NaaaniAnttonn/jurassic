@@ -54,3 +54,6 @@ Interface et code commentés **en français**. Le README détaille la mise en pl
   le placeholder `REMPLACE_PAR_TON_SECRET` dans le dépôt.
 - Nouvelle migration = nouveau fichier `000N_*.sql`, à faire exécuter par l'utilisateur dans Supabase.
 - Notifications sur iPhone uniquement depuis l'app ajoutée à l'écran d'accueil.
+- `.github/workflows/keep-alive.yml` lit l'API REST Supabase le lundi et le jeudi pour éviter la mise en
+  pause du projet gratuit (secrets GitHub `SUPABASE_URL` et `SUPABASE_ANON_KEY`).
+- Pousser une modification de `.github/workflows/` exige un jeton GitHub avec le droit `workflow`.
