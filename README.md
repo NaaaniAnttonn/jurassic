@@ -189,3 +189,22 @@ Notifications :
 npx supabase functions deploy send-reminders --no-verify-jwt --use-api
 ```
 3. **Mise en ligne** : `git push`.
+
+---
+
+# Étape 6 : envies
+
+Onglet « Envies » : tout ce que vous avez envie de faire (activités, voyages, restos, ou vos propres
+catégories), à cocher une fois fait. La date de réalisation est enregistrée (modifiable), et la vue
+« Réalisées » fait le bilan année par année : total, détail par catégorie, puis mois par mois.
+
+Photos : sur n'importe quelle envie (inspiration avant, souvenirs après), réduites dans le navigateur
+(~400 Ko la photo, ~60 Ko la vignette) puis rangées dans un stockage privé réservé à vous deux.
+Pas de vidéos (limite de l'offre gratuite : 50 Mo par fichier, 1 Go au total).
+
+Notifications à l'autre : nouvelle envie, envie cochée, nouvelles photos.
+
+## Mise en place
+1. **Base de données** : SQL Editor → colle `supabase/migrations/0009_envies.sql` → Run,
+   puis `supabase/migrations/0010_envies_photos.sql` → Run (crée le stockage « envies »).
+2. **Mise en ligne** : `git push`.

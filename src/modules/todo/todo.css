@@ -84,14 +84,3 @@
 .tasks-done-toggle { border: 0; background: transparent; font-weight: 700; color: var(--muted); padding: 6px 4px; cursor: pointer; }
 .tasks-done-toggle::before { content: '▸ '; }
 .tasks-done-toggle[aria-expanded='true']::before { content: '▾ '; }
-
-/* Au-dessus du bouton + */
-.toast.tasks-toast {
-  bottom: calc(env(safe-area-inset-bottom) + 156px);
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 8px;
-  padding-block: 6px;
-}
-.tasks-toast .btn { color: var(--text); flex: none; }

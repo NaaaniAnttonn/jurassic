@@ -1,9 +1,9 @@
 import { useRef, useState, type FormEvent } from 'react'
-import { Link, useNavigate, useParams } from 'react-router-dom'
+import { Link, useParams } from 'react-router-dom'
 import { useSpace } from '../../context/SpaceContext'
 import { errorMessage, supabase } from '../../lib/supabase'
 import { sendPush } from '../../lib/push'
-import { IconBell, IconChevronLeft, IconGrip, IconPlus, IconTrash } from '../../components/Icons'
+import { IconBell, IconChevronLeft, IconGrip, IconPlus } from '../../components/Icons'
 import { useLists } from './useLists'
 import { useDragSort } from './useDragSort'
 import ItemRow from './ItemRow'
@@ -12,7 +12,6 @@ import './listes.css'
 
 export default function ListPage() {
   const { listId } = useParams()
-  const navigate = useNavigate()
   const { space, me, partner } = useSpace()
   const { lists, items, setItems, loading, error, setError, reload, patchItems } = useLists()
   const [text, setText] = useState('')
@@ -125,13 +124,6 @@ export default function ListPage() {
     else reload()
   }
 
-  const deleteList = async () => {
-    if (!confirm(`Supprimer la liste « ${list.name} » et ses ${mine.length} article${mine.length > 1 ? 's' : ''} ?`)) return
-    const { error: dbError } = await supabase.from('lists').delete().eq('id', list.id)
-    if (dbError) return setError(errorMessage(dbError))
-    navigate('/listes', { replace: true })
-  }
-
   // Une seule notification pour tous mes ajouts récents (la notification automatique est alors annulée)
   const notifyPartner = async () => {
     if (!partner || !pending.length) return
@@ -169,9 +161,6 @@ export default function ListPage() {
         ) : (
           <button className="lp-title" onClick={() => setRenaming(list.name)} title="Renommer">{list.name}</button>
         )}
-        <button className="icon-btn lp-trash" onClick={deleteList} aria-label={`Supprimer la liste ${list.name}`}>
-          <IconTrash size={22} />
-        </button>
       </header>
 
       {error && <p className="msg msg-error">{error}</p>}

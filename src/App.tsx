@@ -10,6 +10,7 @@ import AgendaPage from './modules/agenda/AgendaPage'
 import ListesPage from './modules/listes/ListesPage'
 import ListPage from './modules/listes/ListPage'
 import TodoPage from './modules/todo/TodoPage'
+import EnviesPage from './modules/envies/EnviesPage'
 
 function SpaceGate() {
   const { space, loading } = useSpace()
@@ -22,6 +23,7 @@ function SpaceGate() {
         <Route path="/listes" element={<ListesPage />} />
         <Route path="/listes/:listId" element={<ListPage />} />
         <Route path="/taches" element={<TodoPage />} />
+        <Route path="/envies" element={<EnviesPage />} />
         <Route path="/reglages" element={<SettingsPage />} />
         <Route path="*" element={<Navigate to="/agenda" replace />} />
       </Route>

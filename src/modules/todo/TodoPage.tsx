@@ -181,7 +181,7 @@ export default function TodoPage() {
       </button>
 
       {toast && (
-        <div className="msg msg-info toast tasks-toast" role="status">
+        <div className="msg msg-info toast toast-action" role="status">
           <span>{toast.text}</span>
           {toast.undo && (
             <button

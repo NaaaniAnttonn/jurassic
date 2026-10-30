@@ -55,3 +55,6 @@ export const IconGrip = ({ size }: P) => (
 export const IconTrash = ({ size }: P) => (
   <svg {...base(size)}><path d="M4.5 6.5h15M9.5 6.5V4.5h5v2M6.5 6.5l1 13a1.5 1.5 0 0 0 1.5 1.5h6a1.5 1.5 0 0 0 1.5-1.5l1-13M10 10.5v6.5M14 10.5v6.5" /></svg>
 )
+export const IconHeart = ({ size }: P) => (
+  <svg {...base(size)}><path d="M12 20s-7.5-4.6-7.5-10.2A4.3 4.3 0 0 1 12 7.2a4.3 4.3 0 0 1 7.5 2.6C19.5 15.4 12 20 12 20z" /></svg>
+)

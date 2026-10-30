@@ -169,6 +169,8 @@ input:focus { outline: none; border-color: var(--moss); box-shadow: 0 0 0 3px co
 .msg-error { background: color-mix(in srgb, var(--danger) 12%, transparent); color: var(--danger); }
 .msg-info { background: color-mix(in srgb, var(--moss) 18%, transparent); color: var(--text); }
 .muted { color: var(--muted); }
+/* Texte lu par les lecteurs d'écran mais invisible */
+.sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
 .small { font-size: 0.88rem; }
 .lead { color: var(--muted); font-size: 1.05rem; }
 .row { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; }
@@ -364,7 +366,7 @@ textarea { resize: vertical; }
   bottom: 0;
   z-index: 5;
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(5, 1fr);
   background: var(--surface);
   border-top: 1px solid var(--line);
   padding: 6px 8px calc(env(safe-area-inset-bottom) + 6px);
@@ -418,6 +420,16 @@ textarea { resize: vertical; }
 .kv code { font-family: var(--font); letter-spacing: 0.15em; }
 .steps { margin: 0; padding-left: 20px; display: grid; gap: 6px; }
 .toast { position: fixed; left: 16px; right: 16px; bottom: calc(env(safe-area-inset-bottom) + 84px); margin: 0; z-index: 10; background: var(--surface); border: 1px solid var(--line); box-shadow: 0 6px 24px rgb(0 0 0 / 0.15); }
+/* Toast avec action (« Annuler »), au-dessus du bouton + */
+.toast.toast-action {
+  bottom: calc(env(safe-area-inset-bottom) + 156px);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding-block: 6px;
+}
+.toast-action .btn { color: var(--text); flex: none; }
 
 @media (prefers-reduced-motion: no-preference) {
   .tab, .btn { transition: background-color 0.15s, color 0.15s, transform 0.1s; }

@@ -2,12 +2,13 @@ import { NavLink, Outlet, useLocation } from 'react-router-dom'
 import { useSpace } from '../context/SpaceContext'
 import Duo from './Duo'
 import InviteCard from './InviteCard'
-import { IconAgenda, IconListes, IconReglages, IconTaches } from './Icons'
+import { IconAgenda, IconHeart, IconListes, IconReglages, IconTaches } from './Icons'
 
 const tabs = [
   { to: '/agenda', label: 'Agenda', Icon: IconAgenda },
   { to: '/listes', label: 'Listes', Icon: IconListes },
   { to: '/taches', label: 'Tâches', Icon: IconTaches },
+  { to: '/envies', label: 'Envies', Icon: IconHeart },
   { to: '/reglages', label: 'Réglages', Icon: IconReglages },
 ]
 

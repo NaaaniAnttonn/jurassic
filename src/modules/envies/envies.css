@@ -1,0 +1,185 @@
+/* Place pour le bouton + au-dessus des onglets */
+.wishes { display: flex; flex-direction: column; gap: 16px; padding-bottom: 72px; }
+.wishes-loading { padding: 40px 0; text-align: center; }
+
+/* Filtre par catégorie : défile horizontalement s'il y en a beaucoup */
+.wish-filter {
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  margin-inline: -16px;
+  padding: 2px 16px 4px;
+  scrollbar-width: none;
+}
+.wish-filter .chip { flex: none; padding: 7px 14px; }
+.chip span { font-weight: 500; opacity: 0.7; margin-left: 2px; }
+
+.wish-section-title {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  font-size: 0.95rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--muted);
+  margin: 0 0 8px 4px;
+}
+.wish-section-title span { font-weight: 600; letter-spacing: 0; }
+
+.wish-list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 6px; }
+.wish-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 4px;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  padding: 6px 6px 6px 10px;
+}
+.wish-check {
+  flex: none;
+  width: 26px;
+  height: 26px;
+  margin: 9px 6px 0 0;
+  border-radius: 50%;
+  border: 2.5px solid var(--moss);
+  background: transparent;
+  color: var(--fern-ink);
+  display: grid;
+  place-items: center;
+  padding: 0;
+  cursor: pointer;
+}
+.wish-row.is-done .wish-check { background: var(--moss); cursor: default; }
+@media (prefers-color-scheme: dark) {
+  .wish-row.is-done .wish-check { color: var(--bg); }
+}
+.wish-main {
+  flex: 1;
+  min-width: 0;
+  border: 0;
+  background: transparent;
+  text-align: left;
+  padding: 8px 4px;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  cursor: pointer;
+}
+.wish-title { font-weight: 600; overflow-wrap: anywhere; }
+.wish-notes, .wish-meta {
+  width: 100%;
+  font-size: 0.82rem;
+  color: var(--muted);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* ---------- Bilan de l'année ---------- */
+.recap-year { display: flex; align-items: center; justify-content: center; gap: 12px; }
+.recap-year span { font-size: 1.6rem; font-weight: 800; letter-spacing: -0.02em; font-variant-numeric: tabular-nums; }
+.recap-year .icon-btn:disabled { opacity: 0.3; cursor: default; }
+.recap-summary { display: flex; flex-direction: column; gap: 12px; }
+.recap-total { font-size: 1.1rem; }
+.recap-total strong { font-size: 2.4rem; font-weight: 800; color: var(--moss); margin-right: 4px; line-height: 1; }
+.recap-cats { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 8px; }
+.recap-cats li {
+  background: color-mix(in srgb, var(--moss) 16%, var(--surface));
+  border-radius: 999px;
+  padding: 5px 12px;
+  font-weight: 600;
+}
+.recap-cats strong { margin-left: 2px; color: var(--moss); }
+.wish-empty, .wish-hint { text-align: center; padding: 8px; }
+
+.wish-done-row { display: flex; gap: 8px; align-items: center; }
+.wish-done-row input { flex: 1; min-width: 0; }
+.wish-done-row .btn { flex: none; }
+
+/* ---------- Photos ---------- */
+.wish-thumb {
+  position: relative;
+  flex: none;
+  width: 56px;
+  height: 56px;
+  margin: 2px 2px 2px 0;
+  border-radius: 10px;
+  overflow: hidden;
+  background: var(--bg);
+}
+.wish-thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.wish-thumb span {
+  position: absolute;
+  right: 3px;
+  bottom: 3px;
+  min-width: 20px;
+  padding: 0 5px;
+  border-radius: 999px;
+  background: rgb(0 0 0 / 0.6);
+  color: #fff;
+  font-size: 0.72rem;
+  font-weight: 700;
+  line-height: 18px;
+  text-align: center;
+}
+
+.photo-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(76px, 1fr)); gap: 6px; }
+.photo-thumb, .photo-add {
+  aspect-ratio: 1;
+  border-radius: 12px;
+  overflow: hidden;
+  padding: 0;
+  border: 0;
+  background: var(--surface);
+  cursor: pointer;
+}
+.photo-thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.photo-thumb.is-pending { outline: 2px dashed var(--moss); outline-offset: -2px; opacity: 0.85; }
+.photo-add {
+  position: relative;
+  display: grid;
+  place-items: center;
+  border: 1.5px dashed var(--muted);
+  color: var(--muted);
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+.photo-add input { position: absolute; width: 1px; height: 1px; opacity: 0; }
+.photo-add:focus-within { outline: 3px solid var(--amber); outline-offset: 2px; }
+.photo-add.is-busy { cursor: progress; border-style: solid; }
+
+/* ---------- Visionneuse plein écran ---------- */
+.lightbox {
+  position: fixed;
+  inset: 0;
+  z-index: 30; /* au-dessus de la fiche */
+  background: #000;
+  color: #fff;
+  display: flex;
+  flex-direction: column;
+}
+.lightbox-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: calc(env(safe-area-inset-top) + 6px) 8px 6px;
+  font-weight: 600;
+}
+.lightbox-head span { flex: 1; text-align: center; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.lightbox .icon-btn { color: #fff; }
+.lightbox .icon-btn:active { background: rgb(255 255 255 / 0.15); }
+.lightbox-stage {
+  position: relative;
+  flex: 1;
+  min-height: 0;
+  display: grid;
+  place-items: center;
+  padding-bottom: env(safe-area-inset-bottom);
+}
+.lightbox-stage img { max-width: 100%; max-height: 100%; object-fit: contain; }
+.lightbox-prev, .lightbox-next { position: absolute; top: 50%; translate: 0 -50%; background: rgb(0 0 0 / 0.35); }
+.lightbox-prev { left: 8px; }
+.lightbox-next { right: 8px; }

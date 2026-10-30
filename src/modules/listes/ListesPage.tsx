@@ -2,13 +2,14 @@ import { useState, type FormEvent } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { useSpace } from '../../context/SpaceContext'
 import { errorMessage, supabase } from '../../lib/supabase'
-import { IconChevronRight, IconListes } from '../../components/Icons'
+import { IconChevronRight, IconListes, IconTrash } from '../../components/Icons'
 import { useLists } from './useLists'
+import type { List } from './types'
 import './listes.css'
 
 export default function ListesPage() {
   const { space, me } = useSpace()
-  const { lists, items, loading, error } = useLists()
+  const { lists, items, loading, error, setError, reload } = useLists()
   const navigate = useNavigate()
   const [name, setName] = useState('')
   const [busy, setBusy] = useState(false)
@@ -30,6 +31,13 @@ export default function ListesPage() {
     navigate(`/listes/${data.id}`)
   }
 
+  const remove = async (list: List, count: number) => {
+    if (!confirm(`Supprimer la liste « ${list.name} »${count ? ` et ses ${count} article${count > 1 ? 's' : ''}` : ''} ?`)) return
+    const { error: dbError } = await supabase.from('lists').delete().eq('id', list.id)
+    if (dbError) setError(errorMessage(dbError))
+    reload()
+  }
+
   if (loading) return <p className="muted lists-loading">Chargement des listes…</p>
 
   return (
@@ -48,7 +56,7 @@ export default function ListesPage() {
             const left = its.filter((i) => !i.checked).length
             const status = its.length === 0 ? 'Vide' : left === 0 ? 'Tout est coché' : `${left} à prendre`
             return (
-              <li key={list.id}>
+              <li key={list.id} className="lists-item">
                 <Link to={`/listes/${list.id}`} className="lists-card">
                   <span className="lists-card-main">
                     <span className="lists-card-name">{list.name}</span>
@@ -56,6 +64,9 @@ export default function ListesPage() {
                   </span>
                   <IconChevronRight size={20} />
                 </Link>
+                <button className="icon-btn lists-trash" onClick={() => remove(list, its.length)} aria-label={`Supprimer la liste ${list.name}`}>
+                  <IconTrash size={20} />
+                </button>
               </li>
             )
           })}

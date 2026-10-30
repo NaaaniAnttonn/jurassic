@@ -18,7 +18,7 @@ Interface et code commentés **en français**. Le README détaille la mise en pl
 - `src/lib/` : client Supabase + `errorMessage()`, notifications push (`push.ts`), détection iOS/standalone.
 - `src/modules/<fonctionnalité>/` : un dossier par fonctionnalité (CSS propre au module ; les classes
   partagées — `.btn*`, `.icon-btn`, `.card`, `.field`, `.small`, `.segmented-compact`, `.sheet*`, `.chip`,
-  `.switch-row`, `.fab` — vont dans `src/index.css`). `index.css` est chargé après les CSS des modules :
+  `.switch-row`, `.fab`, `.toast-action`, `.sr-only` — vont dans `src/index.css`). `index.css` est chargé après les CSS des modules :
   pour surcharger une classe partagée, utiliser un sélecteur plus précis (ex. `.icon-btn.lp-trash`).
 - `src/sw.ts` : service worker maison (vite-plugin-pwa en `injectManifest`) : cache + réception des push.
 - `supabase/migrations/` : SQL numéroté, exécuté **à la main** dans le SQL Editor.
@@ -60,6 +60,14 @@ Interface et code commentés **en français**. Le README détaille la mise en pl
    postérieure à aujourd'hui (`modules/todo/due.ts`). Notifications « confiée » et « terminée » envoyées par le
    client ; récapitulatif de 9 h (heure de Paris) dans `send-reminders/tasks.ts`, une fois par jour et par
    personne grâce à `task_digest_log`.
+6. **Envies** (migration 0009, onglet `/envies`) : table `wishes` (`category` en texte libre : Activités,
+   Voyages, Restos par défaut + celles créées par l'utilisateur ; `done_on` = date de réalisation, null = à faire).
+   Vue « Réalisées » : bilan par année. Notifications envoyées par le client (`envies/notify.ts`) :
+   nouvelle envie, envie cochée, nouvelles photos.
+   Photos (migration 0010) : bucket privé `envies`, chemins `<space_id>/<wish_id>/<id>.jpg` + `-mini.jpg`,
+   accès réservé aux membres via `can_access_space_path()`. Table `wish_photos` pour lister. Réduction
+   dans le navigateur (`envies/photos.ts`, 2048 px / 480 px en JPEG) ; liens signés d'une heure, en cache.
+   Supprimer une envie ou une photo : effacer les fichiers du stockage **avant** les lignes. Pas de vidéos.
 
 ## Points d'attention
 - Ne jamais commit le vrai `CRON_SECRET` : `0003_rappels_cron.sql` et `0005_synchro_cron.sql` gardent
@@ -76,8 +84,7 @@ Interface et code commentés **en français**. Le README détaille la mise en pl
 Après les listes et la to-do :
 - **Recettes** : ingrédients et quantités, ajustement selon le nombre de personnes,
   bouton « ajouter aux courses » qui verse les ingrédients dans la liste en regroupant les doublons.
-- **Envies** : catégories restos à tester, films à voir, idées de week-end ;
-  cocher une fois fait, note et avis pour les restos, bouton « tirer au sort ».
+- **Envies, suite** (la base est faite, étape 6) : note et avis pour les restos, bouton « tirer au sort ».
 - **Compteurs** : temps passé ensemble depuis la date de rencontre,
   comptes à rebours vers les dates importantes.
 - **Style personnalisé** : décos, illustrations, palette à nos goûts
