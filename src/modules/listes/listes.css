@@ -25,6 +25,7 @@
 .list-page.is-dragging { user-select: none; -webkit-user-select: none; }
 .lp-head { display: flex; align-items: center; gap: 4px; margin: -6px 0 0 -10px; }
 .lp-head a.icon-btn { text-decoration: none; }
+.icon-btn.lp-trash { color: var(--danger); margin-right: -8px; }
 .lp-title {
   flex: 1;
   min-width: 0;
@@ -181,4 +182,3 @@
 .lp-done-toggle::before { content: '▾ '; }
 .lp-done-toggle[aria-expanded='false']::before { content: '▸ '; }
 
-.lp-delete { margin-top: 24px; }

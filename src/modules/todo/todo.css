@@ -1,0 +1,97 @@
+/* Place pour le bouton + au-dessus des onglets */
+.tasks { display: flex; flex-direction: column; gap: 18px; padding-bottom: 72px; }
+.tasks-loading { padding: 40px 0; text-align: center; }
+
+.tasks-section-title {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  font-size: 0.95rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--muted);
+  margin: 0 0 8px 4px;
+}
+.tasks-section-title span { font-weight: 600; letter-spacing: 0; }
+.tasks-section.is-late .tasks-section-title { color: var(--danger); }
+.tasks-section.is-today .tasks-section-title { color: var(--text); }
+
+.tasks-list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 6px; }
+
+.task-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 4px;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  padding: 6px 6px 6px 10px;
+}
+.tasks-section.is-late .task-row { border-color: color-mix(in srgb, var(--danger) 45%, var(--line)); }
+
+.task-check {
+  flex: none;
+  width: 26px;
+  height: 26px;
+  margin: 9px 6px 0 0;
+  border-radius: 50%;
+  border: 2.5px solid var(--muted);
+  background: transparent;
+  color: var(--fern-ink);
+  display: grid;
+  place-items: center;
+  padding: 0;
+  cursor: pointer;
+}
+.task-check[aria-checked='true'] { background: var(--moss); border-color: var(--moss); }
+@media (prefers-color-scheme: dark) {
+  .task-check[aria-checked='true'] { color: var(--bg); }
+}
+
+.task-main {
+  flex: 1;
+  min-width: 0;
+  border: 0;
+  background: transparent;
+  text-align: left;
+  padding: 8px 4px;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  cursor: pointer;
+}
+.task-title { font-weight: 600; overflow-wrap: anywhere; }
+.task-meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px 10px;
+  font-size: 0.82rem;
+  color: var(--muted);
+  width: 100%; /* sinon une note longue élargit la carte (bouton en flex) */
+  min-width: 0;
+}
+.task-who { display: inline-flex; align-items: center; gap: 5px; }
+.task-who i { width: 8px; height: 8px; border-radius: 50%; }
+.task-who i + i { margin-left: -8px; box-shadow: 0 0 0 1.5px var(--surface); }
+.task-late { color: var(--danger); font-weight: 700; }
+.task-notes { flex-basis: 100%; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.task-row.is-done .task-title { text-decoration: line-through; color: var(--muted); font-weight: 500; }
+.task-row.is-done { background: transparent; }
+
+.tasks-done-head { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+.tasks-done-toggle { border: 0; background: transparent; font-weight: 700; color: var(--muted); padding: 6px 4px; cursor: pointer; }
+.tasks-done-toggle::before { content: '▸ '; }
+.tasks-done-toggle[aria-expanded='true']::before { content: '▾ '; }
+
+/* Au-dessus du bouton + */
+.toast.tasks-toast {
+  bottom: calc(env(safe-area-inset-bottom) + 156px);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding-block: 6px;
+}
+.tasks-toast .btn { color: var(--text); flex: none; }

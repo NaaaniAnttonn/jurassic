@@ -3,7 +3,7 @@ import { Link, useNavigate, useParams } from 'react-router-dom'
 import { useSpace } from '../../context/SpaceContext'
 import { errorMessage, supabase } from '../../lib/supabase'
 import { sendPush } from '../../lib/push'
-import { IconBell, IconChevronLeft, IconGrip, IconPlus } from '../../components/Icons'
+import { IconBell, IconChevronLeft, IconGrip, IconPlus, IconTrash } from '../../components/Icons'
 import { useLists } from './useLists'
 import { useDragSort } from './useDragSort'
 import ItemRow from './ItemRow'
@@ -169,6 +169,9 @@ export default function ListPage() {
         ) : (
           <button className="lp-title" onClick={() => setRenaming(list.name)} title="Renommer">{list.name}</button>
         )}
+        <button className="icon-btn lp-trash" onClick={deleteList} aria-label={`Supprimer la liste ${list.name}`}>
+          <IconTrash size={22} />
+        </button>
       </header>
 
       {error && <p className="msg msg-error">{error}</p>}
@@ -239,8 +242,6 @@ export default function ListPage() {
           )}
         </section>
       )}
-
-      <button className="btn btn-danger btn-block lp-delete" onClick={deleteList}>Supprimer la liste</button>
     </div>
   )
 }

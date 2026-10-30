@@ -17,10 +17,12 @@ Interface et code commentés **en français**. Le README détaille la mise en pl
 - `src/context/` : `AuthContext` (session) et `SpaceContext` (espace + profils, temps réel).
 - `src/lib/` : client Supabase + `errorMessage()`, notifications push (`push.ts`), détection iOS/standalone.
 - `src/modules/<fonctionnalité>/` : un dossier par fonctionnalité (CSS propre au module ; les classes
-  partagées — `.btn*`, `.icon-btn`, `.card`, `.field`, `.small` — vont dans `src/index.css`).
+  partagées — `.btn*`, `.icon-btn`, `.card`, `.field`, `.small`, `.segmented-compact`, `.sheet*`, `.chip`,
+  `.switch-row`, `.fab` — vont dans `src/index.css`). `index.css` est chargé après les CSS des modules :
+  pour surcharger une classe partagée, utiliser un sélecteur plus précis (ex. `.icon-btn.lp-trash`).
 - `src/sw.ts` : service worker maison (vite-plugin-pwa en `injectManifest`) : cache + réception des push.
 - `supabase/migrations/` : SQL numéroté, exécuté **à la main** dans le SQL Editor.
-- `supabase/functions/` : Edge Functions Deno (`send-push`, `send-reminders` [+ récap des listes], `calendar-feed`, `sync-calendars`),
+- `supabase/functions/` : Edge Functions Deno (`send-push`, `send-reminders` [+ récap des listes et des tâches], `calendar-feed`, `sync-calendars`),
   déployées avec `npx supabase functions deploy <nom> --use-api` (`--no-verify-jwt` sauf `send-push`).
 
 ## Modèle et conventions
@@ -53,7 +55,11 @@ Interface et code commentés **en français**. Le README détaille la mise en pl
    à mi-chemin entre les voisins (`modules/listes/useDragSort.ts`, sans bibliothèque). Notification groupée :
    `notified = false` sur chaque ajout ; `send-reminders/lists.ts` envoie un récapitulatif 3 min après le
    dernier ajout d'une personne dans une liste, ou le bouton « Prévenir » le fait tout de suite.
-5. **Tâches** : encore une page vide (`modules/todo`).
+5. **Tâches** (migration 0008) : table `tasks` (`for_users`, `due_date` jour sans heure, `recurrence`, `done`).
+   Une tâche répétée n'est jamais « terminée » : la cocher avance `due_date` à la prochaine échéance
+   postérieure à aujourd'hui (`modules/todo/due.ts`). Notifications « confiée » et « terminée » envoyées par le
+   client ; récapitulatif de 9 h (heure de Paris) dans `send-reminders/tasks.ts`, une fois par jour et par
+   personne grâce à `task_digest_log`.
 
 ## Points d'attention
 - Ne jamais commit le vrai `CRON_SECRET` : `0003_rappels_cron.sql` et `0005_synchro_cron.sql` gardent

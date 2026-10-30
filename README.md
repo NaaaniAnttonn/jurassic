@@ -167,3 +167,25 @@ Notifications à l'autre :
 npx supabase functions deploy send-reminders --no-verify-jwt --use-api
 ```
 3. **Mise en ligne** : `git push`.
+
+---
+
+# Étape 5 : tâches partagées
+
+Chaque tâche a un titre, « pour qui » (toi / l'autre / vous deux), une échéance facultative,
+une répétition facultative (cocher une tâche répétée la reprogramme à la prochaine échéance) et des notes.
+Affichage par échéance : En retard / Aujourd'hui / Cette semaine / Plus tard / Sans date,
+filtre Toutes / Les miennes, tâches terminées repliées en bas.
+
+Notifications :
+- **tâche confiée** : quand l'un crée (ou réattribue) une tâche pour l'autre ou pour vous deux ;
+- **tâche terminée** : quand l'un termine une tâche créée par l'autre ;
+- **récapitulatif du matin** : à 9 h, les tâches du jour et en retard de chacun.
+
+## Mise en place
+1. **Base de données** : SQL Editor → colle `supabase/migrations/0008_taches.sql` → Run.
+2. **Récapitulatif du matin** (porté par la fonction des rappels) :
+```bash
+npx supabase functions deploy send-reminders --no-verify-jwt --use-api
+```
+3. **Mise en ligne** : `git push`.

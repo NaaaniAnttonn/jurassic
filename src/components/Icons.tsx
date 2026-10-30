@@ -52,3 +52,6 @@ export const IconGrip = ({ size }: P) => (
     <circle cx="9" cy="18" r="1.6" /><circle cx="15" cy="18" r="1.6" />
   </svg>
 )
+export const IconTrash = ({ size }: P) => (
+  <svg {...base(size)}><path d="M4.5 6.5h15M9.5 6.5V4.5h5v2M6.5 6.5l1 13a1.5 1.5 0 0 0 1.5 1.5h6a1.5 1.5 0 0 0 1.5-1.5l1-13M10 10.5v6.5M14 10.5v6.5" /></svg>
+)
