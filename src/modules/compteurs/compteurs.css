@@ -1,24 +1,69 @@
-/* ---------- Bande en haut de l'agenda ---------- */
+/* ---------- Bande en haut de l'agenda (repliable) ---------- */
 .counters-band {
-  display: flex;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
   align-items: center;
-  gap: 10px;
-  width: 100%;
   margin-bottom: 12px;
-  padding: 9px 10px 9px 14px;
   border: 1px solid color-mix(in srgb, var(--amber) 40%, var(--line));
   border-radius: var(--radius-sm);
   background: color-mix(in srgb, var(--amber) 12%, var(--surface));
+}
+.counters-band.is-empty { background: transparent; border-style: dashed; }
+.counters-band-main {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+  min-height: 44px;
+  padding: 6px 4px 6px 14px;
+  border: 0;
+  background: transparent;
   color: var(--text);
   text-align: left;
   cursor: pointer;
 }
-.counters-band > svg:first-child { color: var(--danger); flex: none; }
-.counters-band > svg:last-child { color: var(--muted); flex: none; }
-.counters-band-text { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 6px; font-size: 0.9rem; font-weight: 600; }
-.counters-band-together { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-/* Une pastille par compte à rebours ; elles passent à la ligne s'il y en a beaucoup */
-.counters-band-chips { display: flex; flex-wrap: wrap; gap: 5px; }
+.counters-band-main > svg { color: var(--danger); flex: none; }
+/* Une seule ligne : seul le titre de l'échéance se raccourcit, les jours et « +2 » restent visibles */
+.counters-band-line {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  align-items: baseline;
+  gap: 5px;
+  white-space: nowrap;
+  font-size: 0.88rem;
+  font-weight: 600;
+}
+.counters-band-together { flex: none; max-width: 100%; overflow: hidden; text-overflow: ellipsis; }
+.counters-band-sep { flex: none; color: var(--muted); }
+.counters-band-next { flex: 0 1 auto; min-width: 2.5em; overflow: hidden; text-overflow: ellipsis; color: var(--muted); }
+.counters-band-days { flex: none; font-weight: 800; }
+.counters-band-more {
+  flex: none;
+  padding: 0 6px;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--amber) 28%, var(--surface));
+  font-size: 0.78rem;
+  font-weight: 800;
+}
+.counters-band.is-empty .counters-band-line { color: var(--muted); font-weight: 500; }
+.icon-btn.counters-band-toggle { width: 40px; height: 40px; margin-right: 2px; color: var(--muted); }
+.counters-band-toggle svg { transition: transform 0.2s; }
+.counters-band-toggle[aria-expanded='true'] svg { transform: rotate(180deg); }
+
+/* Déroulé : une pastille par compte à rebours */
+.counters-band-chips {
+  grid-column: 1 / -1;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+  padding: 0 12px 10px 42px;
+  border: 0;
+  background: transparent;
+  color: var(--text);
+  text-align: left;
+  cursor: pointer;
+}
 .counters-chip {
   max-width: 100%;
   padding: 2px 9px;
@@ -31,8 +76,6 @@
   text-overflow: ellipsis;
 }
 .counters-chip strong { font-weight: 800; }
-.counters-band.is-empty { background: transparent; border-style: dashed; }
-.counters-band.is-empty .counters-band-text { color: var(--muted); font-weight: 500; }
 
 /* ---------- Fiche « Compteurs » ---------- */
 .counters-together { display: flex; flex-direction: column; gap: 6px; margin-bottom: 10px; }

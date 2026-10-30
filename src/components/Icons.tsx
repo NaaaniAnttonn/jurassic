@@ -66,3 +66,6 @@ export const IconDice = ({ size }: P) => (
     <circle cx="8.8" cy="15.2" r="1.2" fill="currentColor" stroke="none" /><circle cx="15.2" cy="15.2" r="1.2" fill="currentColor" stroke="none" />
   </svg>
 )
+export const IconChevronDown = ({ size }: P) => (
+  <svg {...base(size)}><path d="M5 9l7 7 7-7" /></svg>
+)

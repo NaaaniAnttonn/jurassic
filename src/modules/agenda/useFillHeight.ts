@@ -14,9 +14,10 @@ export function useFillHeight<T extends HTMLElement>(bottomGap = 8) {
       setHeight(Math.max(360, Math.floor(window.innerHeight - top - tabbar - bottomGap)))
     }
     update()
-    // Rotation, clavier, carte d'invitation qui apparaît au-dessus...
+    // Rotation, clavier, bande des compteurs dépliée, carte d'invitation au-dessus...
+    // (body a la hauteur de l'écran : c'est la zone de contenu qui grandit)
     const ro = new ResizeObserver(update)
-    ro.observe(document.body)
+    ro.observe(ref.current?.closest('main') ?? document.body)
     window.addEventListener('resize', update)
     return () => {
       ro.disconnect()
