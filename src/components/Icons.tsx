@@ -58,3 +58,11 @@ export const IconTrash = ({ size }: P) => (
 export const IconHeart = ({ size }: P) => (
   <svg {...base(size)}><path d="M12 20s-7.5-4.6-7.5-10.2A4.3 4.3 0 0 1 12 7.2a4.3 4.3 0 0 1 7.5 2.6C19.5 15.4 12 20 12 20z" /></svg>
 )
+export const IconDice = ({ size }: P) => (
+  <svg {...base(size)}>
+    <rect x="4" y="4" width="16" height="16" rx="3.5" />
+    <circle cx="8.8" cy="8.8" r="1.2" fill="currentColor" stroke="none" /><circle cx="15.2" cy="8.8" r="1.2" fill="currentColor" stroke="none" />
+    <circle cx="12" cy="12" r="1.2" fill="currentColor" stroke="none" />
+    <circle cx="8.8" cy="15.2" r="1.2" fill="currentColor" stroke="none" /><circle cx="15.2" cy="15.2" r="1.2" fill="currentColor" stroke="none" />
+  </svg>
+)

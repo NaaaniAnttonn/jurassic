@@ -10,6 +10,7 @@ import WeekView from './WeekView'
 import MonthView from './MonthView'
 import EventSheet from './EventSheet'
 import ExternalEventSheet from './ExternalEventSheet'
+import CountersBand from '../compteurs/CountersBand'
 import type { CalEvent } from './types'
 import './agenda.css'
 
@@ -99,6 +100,8 @@ export default function AgendaPage() {
 
   return (
     <div className={`agenda${view === 'week' ? '' : ' is-fill'}`}>
+      <CountersBand />
+
       <div className="ag-toolbar">
         <div className="segmented segmented-compact" role="tablist" aria-label="Affichage">
           {VIEWS.map(([v, label]) => (

@@ -1,0 +1,63 @@
+/* ---------- Bande en haut de l'agenda ---------- */
+.counters-band {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  margin-bottom: 12px;
+  padding: 9px 10px 9px 14px;
+  border: 1px solid color-mix(in srgb, var(--amber) 40%, var(--line));
+  border-radius: var(--radius-sm);
+  background: color-mix(in srgb, var(--amber) 12%, var(--surface));
+  color: var(--text);
+  text-align: left;
+  cursor: pointer;
+}
+.counters-band > svg:first-child { color: var(--danger); flex: none; }
+.counters-band > svg:last-child { color: var(--muted); flex: none; }
+.counters-band-text { flex: 1; min-width: 0; display: flex; flex-wrap: wrap; gap: 0 12px; font-size: 0.9rem; font-weight: 600; }
+.counters-band-text span { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 100%; }
+.counters-band-text span + span { color: var(--muted); }
+.counters-band.is-empty { background: transparent; border-style: dashed; }
+.counters-band.is-empty .counters-band-text { color: var(--muted); font-weight: 500; }
+
+/* ---------- Fiche « Compteurs » ---------- */
+.counters-together { display: flex; flex-direction: column; gap: 6px; margin-bottom: 10px; }
+.counters-big { font-size: 1.6rem; font-weight: 800; letter-spacing: -0.02em; line-height: 1.15; color: var(--moss); }
+.counters-anniv { font-weight: 700; }
+.counters-met { display: flex; align-items: flex-end; gap: 8px; margin-top: 8px; }
+.counters-met .field { flex: 1; margin-bottom: 0; min-width: 0; }
+.counters-met .btn { flex: none; min-height: 46px; }
+
+.counters-subtitle { margin: 8px 2px 6px; font-size: 1rem; font-weight: 800; }
+.counters-list { list-style: none; margin: 0 0 8px; padding: 0; display: flex; flex-direction: column; gap: 6px; }
+.counters-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  padding: 8px 6px 8px 8px;
+}
+.counters-days {
+  flex: none;
+  width: 58px;
+  height: 52px;
+  border-radius: 12px;
+  background: color-mix(in srgb, var(--amber) 22%, var(--surface));
+  display: grid;
+  place-content: center;
+  text-align: center;
+  font-size: 1.3rem;
+  font-weight: 800;
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+}
+.counters-days small { display: block; font-size: 0.65rem; font-weight: 600; color: var(--muted); margin-top: 3px; }
+.counters-item-main { flex: 1; min-width: 0; display: flex; flex-direction: column; }
+.counters-item-title { font-weight: 700; overflow-wrap: anywhere; }
+.counters-add { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 6px; align-items: center; }
+.counters-add input:first-child { grid-column: 1 / -1; }
+.counters-add input { padding-inline: 10px; }
+.counters-add .btn { min-height: 46px; padding-inline: 12px; }

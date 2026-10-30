@@ -1,12 +1,13 @@
 import { useCallback, useRef, useState } from 'react'
 import { useSpace } from '../../context/SpaceContext'
-import { IconCheck, IconChevronLeft, IconChevronRight, IconHeart, IconPlus } from '../../components/Icons'
+import { IconCheck, IconChevronLeft, IconChevronRight, IconDice, IconHeart, IconPlus } from '../../components/Icons'
 import { fmtShort, toDateInput } from '../agenda/dates'
 import { useWishes } from './useWishes'
 import { useSignedUrls } from './photos'
 import { notifyPartner } from './notify'
 import { DEFAULT_CATEGORIES, categoriesOf, type Wish } from './types'
 import WishSheet from './WishSheet'
+import Draw from './Draw'
 import './envies.css'
 
 type View = 'todo' | 'done'
@@ -30,6 +31,7 @@ export default function EnviesPage() {
   const [category, setCategory] = useState<string | null>(null) // filtre (null = toutes)
   const [year, setYear] = useState(() => new Date().getFullYear())
   const [sheet, setSheet] = useState<{ wish: Wish | null } | null>(null)
+  const [draw, setDraw] = useState<string | null>(null) // catégorie du tirage au sort
   const [toast, setToast] = useState<{ text: string; undo: () => void } | null>(null)
   const toastTimer = useRef<ReturnType<typeof setTimeout>>()
 
@@ -107,7 +109,14 @@ export default function EnviesPage() {
 
         {groups.map(({ c, items }) => (
           <section key={c} className="wish-section">
-            <h2 className="wish-section-title">{c} <span>{items.length}</span></h2>
+            <div className="wish-section-head">
+              <h2 className="wish-section-title">{c} <span>{items.length}</span></h2>
+              {items.length > 1 && (
+                <button className="btn btn-ghost btn-sm wish-draw" onClick={() => setDraw(c)}>
+                  <IconDice size={18} /> Tirer au sort
+                </button>
+              )}
+            </div>
             <ul className="wish-list">
               {items.map((w) => (
                 <li key={w.id} className="wish-row">
@@ -208,6 +217,18 @@ export default function EnviesPage() {
             Annuler
           </button>
         </div>
+      )}
+
+      {draw && (
+        <Draw
+          category={draw}
+          wishes={todo.filter((w) => w.category === draw)}
+          onOpen={(w) => {
+            setDraw(null)
+            setSheet({ wish: w })
+          }}
+          onClose={() => setDraw(null)}
+        />
       )}
 
       {sheet && (

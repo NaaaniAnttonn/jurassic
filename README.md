@@ -208,3 +208,21 @@ Notifications à l'autre : nouvelle envie, envie cochée, nouvelles photos.
 1. **Base de données** : SQL Editor → colle `supabase/migrations/0009_envies.sql` → Run,
    puis `supabase/migrations/0010_envies_photos.sql` → Run (crée le stockage « envies »).
 2. **Mise en ligne** : `git push`.
+
+---
+
+# Étape 7 : compteurs et tirage au sort
+
+- **Compteurs** : bande en haut de l'agenda (« 3 ans 4 mois 12 j ensemble · Lisbonne dans 23 jours ») ;
+  en la touchant : temps passé ensemble depuis la date de rencontre, prochain anniversaire, et comptes à
+  rebours vers vos dates importantes (une date passée disparaît le lendemain). Notification à vous deux
+  le jour de l'anniversaire de rencontre, vers 9 h.
+- **Tirer au sort** : un bouton par catégorie dans les Envies.
+
+## Mise en place
+1. **Base de données** : SQL Editor → colle `supabase/migrations/0011_compteurs.sql` → Run.
+2. **Notification d'anniversaire** (portée par la fonction des rappels) :
+```bash
+npx supabase functions deploy send-reminders --no-verify-jwt --use-api
+```
+3. **Mise en ligne** : `git push`.

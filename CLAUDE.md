@@ -22,7 +22,7 @@ Interface et code commentés **en français**. Le README détaille la mise en pl
   pour surcharger une classe partagée, utiliser un sélecteur plus précis (ex. `.icon-btn.lp-trash`).
 - `src/sw.ts` : service worker maison (vite-plugin-pwa en `injectManifest`) : cache + réception des push.
 - `supabase/migrations/` : SQL numéroté, exécuté **à la main** dans le SQL Editor.
-- `supabase/functions/` : Edge Functions Deno (`send-push`, `send-reminders` [+ récap des listes et des tâches], `calendar-feed`, `sync-calendars`),
+- `supabase/functions/` : Edge Functions Deno (`send-push`, `send-reminders` [+ récap des listes et des tâches, anniversaire], `calendar-feed`, `sync-calendars`),
   déployées avec `npx supabase functions deploy <nom> --use-api` (`--no-verify-jwt` sauf `send-push`).
 
 ## Modèle et conventions
@@ -68,6 +68,11 @@ Interface et code commentés **en français**. Le README détaille la mise en pl
    accès réservé aux membres via `can_access_space_path()`. Table `wish_photos` pour lister. Réduction
    dans le navigateur (`envies/photos.ts`, 2048 px / 480 px en JPEG) ; liens signés d'une heure, en cache.
    Supprimer une envie ou une photo : effacer les fichiers du stockage **avant** les lignes. Pas de vidéos.
+   Tirage au sort par catégorie (`envies/Draw.tsx`).
+7. **Compteurs** (migration 0011, `modules/compteurs`) : `spaces.met_on` (date de rencontre) et table
+   `countdowns` ; bande en haut de l'agenda + fiche. Calculs dans `compteurs/dates.ts` (un 29 février est
+   fêté le 28). Comptes à rebours passés supprimés par le client au chargement. Notification d'anniversaire
+   dans `send-reminders/anniversary.ts` (9 h, une par an via `anniversary_log`).
 
 ## Points d'attention
 - Ne jamais commit le vrai `CRON_SECRET` : `0003_rappels_cron.sql` et `0005_synchro_cron.sql` gardent
@@ -84,9 +89,7 @@ Interface et code commentés **en français**. Le README détaille la mise en pl
 Après les listes et la to-do :
 - **Recettes** : ingrédients et quantités, ajustement selon le nombre de personnes,
   bouton « ajouter aux courses » qui verse les ingrédients dans la liste en regroupant les doublons.
-- **Envies, suite** (la base est faite, étape 6) : note et avis pour les restos, bouton « tirer au sort ».
-- **Compteurs** : temps passé ensemble depuis la date de rencontre,
-  comptes à rebours vers les dates importantes.
+- **Envies, suite** : note et avis pour les restos.
 - **Style personnalisé** : décos, illustrations, palette à nos goûts
   (les couleurs et la police sont centralisées dans `src/index.css`).
 

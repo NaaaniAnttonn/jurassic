@@ -183,3 +183,35 @@
 .lightbox-prev, .lightbox-next { position: absolute; top: 50%; translate: 0 -50%; background: rgb(0 0 0 / 0.35); }
 .lightbox-prev { left: 8px; }
 .lightbox-next { right: 8px; }
+
+/* ---------- Tirage au sort ---------- */
+.wish-section-head { display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-bottom: 8px; }
+.wish-section-head .wish-section-title { margin-bottom: 0; }
+.btn.wish-draw { color: var(--text); gap: 6px; padding-inline: 10px 12px; min-height: 34px; }
+
+/* .sheet-backdrop.draw-backdrop : doit l'emporter sur .sheet-backdrop (index.css, chargé après) */
+.sheet-backdrop.draw-backdrop { align-items: center; padding: 20px; }
+.draw {
+  width: 100%;
+  max-width: 420px;
+  background: var(--surface);
+  border-radius: var(--radius-lg);
+  padding: 22px 18px 16px;
+  text-align: center;
+  box-shadow: 0 18px 50px rgb(0 0 0 / 0.3);
+}
+.draw-category { display: inline-flex; align-items: center; gap: 6px; color: var(--muted); font-weight: 600; font-size: 0.9rem; }
+.draw-result {
+  margin: 18px 0 8px;
+  min-height: 2.4em;
+  display: grid;
+  place-items: center;
+  font-size: 1.6rem;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  line-height: 1.2;
+  overflow-wrap: anywhere;
+}
+.draw-result.is-rolling { color: var(--muted); filter: blur(0.6px); }
+.draw-notes { color: var(--muted); font-size: 0.92rem; margin-bottom: 6px; white-space: pre-wrap; }
+.draw-actions { display: flex; justify-content: center; flex-wrap: wrap; gap: 8px; margin-top: 16px; }

@@ -52,13 +52,14 @@ export function SpaceProvider({ children }: { children: ReactNode }) {
     refresh()
   }, [refresh])
 
-  // Temps réel : arrivée du/de la partenaire, changement de nom ou de couleur
+  // Temps réel : arrivée du/de la partenaire, changement de nom ou de couleur, réglages de l'espace
   useEffect(() => {
     if (!space) return
     const channel = supabase
       .channel(`space-${space.id}`)
       .on('postgres_changes', { event: '*', schema: 'public', table: 'space_members', filter: `space_id=eq.${space.id}` }, refresh)
       .on('postgres_changes', { event: 'UPDATE', schema: 'public', table: 'profiles' }, refresh)
+      .on('postgres_changes', { event: 'UPDATE', schema: 'public', table: 'spaces', filter: `id=eq.${space.id}` }, refresh)
       .subscribe()
     return () => {
       supabase.removeChannel(channel)

@@ -12,7 +12,7 @@ export const supabase = createClient(url, anonKey, {
 })
 
 export type Profile = { id: string; display_name: string; color: string }
-export type Space = { id: string; name: string; invite_code: string; created_by: string | null }
+export type Space = { id: string; name: string; invite_code: string; created_by: string | null; met_on?: string | null }
 
 /** Transforme une erreur Supabase/Postgres en message lisible */
 export function errorMessage(e: unknown): string {

@@ -1,10 +1,12 @@
 // Edge Function appelée chaque minute par pg_cron : envoie les rappels d'événements
-// les notifications groupées des listes (lists.ts) et le récapitulatif du matin des tâches (tasks.ts).
+// les notifications groupées des listes (lists.ts), le récapitulatif du matin des tâches (tasks.ts)
+// et l'anniversaire de rencontre (anniversary.ts).
 // Déployer avec --no-verify-jwt ; protégée par l'en-tête x-cron-secret.
 import { createClient, type SupabaseClient } from 'npm:@supabase/supabase-js@2.45.4'
 import webpush from 'npm:web-push@3.6.7'
 import { sendListDigests } from './lists.ts'
 import { sendTaskDigests } from './tasks.ts'
+import { sendAnniversaries } from './anniversary.ts'
 
 const TZ = 'Europe/Paris'
 const WINDOW_MS = 5 * 60 * 1000 // rattrape un éventuel retard du cron
@@ -136,6 +138,7 @@ Deno.serve(async (req) => {
   const push = (userIds: string[], payload: { title: string; body: string; url: string }) => notify(admin, userIds, payload)
   const lists = await sendListDigests(admin, push)
   const tasks = await sendTaskDigests(admin, push)
+  const anniversaries = await sendAnniversaries(admin, push)
 
-  return new Response(JSON.stringify({ sent, lists, tasks }), { headers: { 'Content-Type': 'application/json' } })
+  return new Response(JSON.stringify({ sent, lists, tasks, anniversaries }), { headers: { 'Content-Type': 'application/json' } })
 })
