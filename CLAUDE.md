@@ -57,3 +57,20 @@ Interface et code commentés **en français**. Le README détaille la mise en pl
 - `.github/workflows/keep-alive.yml` lit l'API REST Supabase le lundi et le jeudi pour éviter la mise en
   pause du projet gratuit (secrets GitHub `SUPABASE_URL` et `SUPABASE_ANON_KEY`).
 - Pousser une modification de `.github/workflows/` exige un jeton GitHub avec le droit `workflow`.
+
+## Idées futures
+À ne pas développer maintenant, juste à garder en tête.
+
+Après les listes et la to-do :
+- **Recettes** : ingrédients et quantités, ajustement selon le nombre de personnes,
+  bouton « ajouter aux courses » qui verse les ingrédients dans la liste en regroupant les doublons.
+- **Envies** : catégories restos à tester, films à voir, idées de week-end ;
+  cocher une fois fait, note et avis pour les restos, bouton « tirer au sort ».
+- **Compteurs** : temps passé ensemble depuis la date de rencontre,
+  comptes à rebours vers les dates importantes.
+- **Style personnalisé** : décos, illustrations, palette à nos goûts
+  (les couleurs et la police sont centralisées dans `src/index.css`).
+
+Bien plus tard :
+- Carnet d'entretien des véhicules avec rappels.
+- Fonctions de vie commune (tâches ménagères, documents) : seulement si on emménage ensemble.
