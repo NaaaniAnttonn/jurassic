@@ -38,3 +38,17 @@ export const IconLock = ({ size }: P) => (
 export const IconBell = ({ size }: P) => (
   <svg {...base(size)}><path d="M6 16.5V11a6 6 0 0 1 12 0v5.5l1.5 2h-15z" /><path d="M10 21h4" /></svg>
 )
+export const IconClose = ({ size }: P) => (
+  <svg {...base(size)}><path d="M6 6l12 12M18 6L6 18" /></svg>
+)
+export const IconCheck = ({ size }: P) => (
+  <svg {...base(size)}><path d="M5 12.5l4.5 4.5L19 7.5" /></svg>
+)
+/** Poignée de glisser-déposer (six points) */
+export const IconGrip = ({ size }: P) => (
+  <svg {...base(size)} fill="currentColor" stroke="none">
+    <circle cx="9" cy="6" r="1.6" /><circle cx="15" cy="6" r="1.6" />
+    <circle cx="9" cy="12" r="1.6" /><circle cx="15" cy="12" r="1.6" />
+    <circle cx="9" cy="18" r="1.6" /><circle cx="15" cy="18" r="1.6" />
+  </svg>
+)

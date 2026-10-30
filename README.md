@@ -146,3 +146,24 @@ npx supabase functions deploy sync-calendars --no-verify-jwt --use-api
   l'iPhone est bien plus rapide. On ne peut pas forcer Google.
 - Import : on garde les occurrences d'un mois en arrière à un an en avant.
 - « Créer un nouveau lien » invalide l'ancien (à faire si le lien a fuité).
+
+---
+
+# Étape 4 : listes partagées
+
+Autant de listes que vous voulez (une liste « Courses » est créée d'office), en temps réel.
+Articles avec quantité facultative, ordre manuel par glisser-déposer (poignée ⠿, ou flèches haut/bas
+au clavier), articles cochés regroupés en bas. Ajouter un article déjà coché le remet dans la liste.
+
+Notifications à l'autre :
+- **automatique** : une seule notification qui récapitule les ajouts, 3 minutes après le dernier ;
+- **bouton « Prévenir »** : envoie tout de suite ce récapitulatif (et annule l'automatique).
+
+## Mise en place
+
+1. **Base de données** : SQL Editor → colle `supabase/migrations/0007_listes.sql` → Run.
+2. **Notification groupée** (portée par la fonction des rappels, qui tourne déjà chaque minute) :
+```bash
+npx supabase functions deploy send-reminders --no-verify-jwt --use-api
+```
+3. **Mise en ligne** : `git push`.

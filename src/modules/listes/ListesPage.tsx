@@ -1,6 +1,75 @@
-import ComingSoon from '../../components/ComingSoon'
-import { IconListes } from '../../components/Icons'
+import { useState, type FormEvent } from 'react'
+import { Link, useNavigate } from 'react-router-dom'
+import { useSpace } from '../../context/SpaceContext'
+import { errorMessage, supabase } from '../../lib/supabase'
+import { IconChevronRight, IconListes } from '../../components/Icons'
+import { useLists } from './useLists'
+import './listes.css'
 
 export default function ListesPage() {
-  return <ComingSoon icon={<IconListes size={40} />} text="Les listes de courses et d’affaires arrivent bientôt." />
+  const { space, me } = useSpace()
+  const { lists, items, loading, error } = useLists()
+  const navigate = useNavigate()
+  const [name, setName] = useState('')
+  const [busy, setBusy] = useState(false)
+  const [formError, setFormError] = useState('')
+
+  const create = async (e: FormEvent) => {
+    e.preventDefault()
+    const trimmed = name.trim()
+    if (!trimmed || !space || !me) return
+    setBusy(true)
+    const { data, error: dbError } = await supabase
+      .from('lists')
+      .insert({ space_id: space.id, name: trimmed, created_by: me.id })
+      .select('id')
+      .single()
+    setBusy(false)
+    if (dbError) return setFormError(errorMessage(dbError))
+    setName('')
+    navigate(`/listes/${data.id}`)
+  }
+
+  if (loading) return <p className="muted lists-loading">Chargement des listes…</p>
+
+  return (
+    <div className="lists">
+      {error && <p className="msg msg-error">Impossible de charger les listes : {error}</p>}
+
+      {lists.length === 0 ? (
+        <div className="empty">
+          <div className="empty-icon"><IconListes size={40} /></div>
+          <p>Aucune liste pour l’instant.</p>
+        </div>
+      ) : (
+        <ul className="lists-grid">
+          {lists.map((list) => {
+            const its = items.filter((i) => i.list_id === list.id)
+            const left = its.filter((i) => !i.checked).length
+            const status = its.length === 0 ? 'Vide' : left === 0 ? 'Tout est coché' : `${left} à prendre`
+            return (
+              <li key={list.id}>
+                <Link to={`/listes/${list.id}`} className="lists-card">
+                  <span className="lists-card-main">
+                    <span className="lists-card-name">{list.name}</span>
+                    <span className="lists-card-status">{status}</span>
+                  </span>
+                  <IconChevronRight size={20} />
+                </Link>
+              </li>
+            )
+          })}
+        </ul>
+      )}
+
+      <form className="card lists-new" onSubmit={create}>
+        <label className="field">
+          <span>Nouvelle liste</span>
+          <input value={name} onChange={(e) => setName(e.target.value)} placeholder="Ex. Valise Lyon, Bricolage" maxLength={60} />
+        </label>
+        {formError && <p className="msg msg-error">{formError}</p>}
+        <button className="btn btn-secondary" disabled={busy || !name.trim()}>Créer la liste</button>
+      </form>
+    </div>
+  )
 }

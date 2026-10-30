@@ -8,6 +8,7 @@ import Shell from './components/Shell'
 import Splash from './components/Splash'
 import AgendaPage from './modules/agenda/AgendaPage'
 import ListesPage from './modules/listes/ListesPage'
+import ListPage from './modules/listes/ListPage'
 import TodoPage from './modules/todo/TodoPage'
 
 function SpaceGate() {
@@ -19,6 +20,7 @@ function SpaceGate() {
       <Route element={<Shell />}>
         <Route path="/agenda" element={<AgendaPage />} />
         <Route path="/listes" element={<ListesPage />} />
+        <Route path="/listes/:listId" element={<ListPage />} />
         <Route path="/taches" element={<TodoPage />} />
         <Route path="/reglages" element={<SettingsPage />} />
         <Route path="*" element={<Navigate to="/agenda" replace />} />

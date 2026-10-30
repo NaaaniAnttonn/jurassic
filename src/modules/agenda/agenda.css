@@ -36,18 +36,6 @@
   cursor: pointer;
   border-radius: var(--radius-sm);
 }
-.icon-btn {
-  display: grid;
-  place-items: center;
-  width: 40px;
-  height: 40px;
-  border: 0;
-  border-radius: 50%;
-  background: transparent;
-  color: var(--text);
-  cursor: pointer;
-}
-.icon-btn:active { background: var(--line); }
 .ag-loading { padding: 40px 0; text-align: center; }
 
 /* ---------- Vue semaine : un jour par ligne ---------- */
@@ -358,7 +346,6 @@
   background: var(--surface);
 }
 .sheet-head h2 { margin: 0; font-size: 0.98rem; text-align: center; }
-.btn-sm { min-height: 38px; padding: 8px 16px; }
 .sheet-body {
   overflow-y: auto;
   padding: 16px 16px calc(env(safe-area-inset-bottom) + 24px);
@@ -451,7 +438,6 @@ textarea {
 }
 textarea { resize: vertical; }
 .sheet input:not([role='switch']):not(.sheet-title-input) { background: var(--surface); }
-.small { font-size: 0.88rem; }
 
 /* ---------- Agendas importés ---------- */
 .ag-event-source { font-style: italic; }

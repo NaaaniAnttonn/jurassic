@@ -139,11 +139,25 @@ input:focus { outline: none; border-color: var(--moss); box-shadow: 0 0 0 3px co
 .btn-ghost { background: transparent; color: var(--muted); padding-inline: 12px; }
 .btn-danger { background: transparent; color: var(--danger); border: 1px solid currentColor; }
 .btn-block { width: 100%; }
+.btn-sm { min-height: 38px; padding: 8px 16px; }
+.icon-btn {
+  display: grid;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  border: 0;
+  border-radius: 50%;
+  background: transparent;
+  color: var(--text);
+  cursor: pointer;
+}
+.icon-btn:active { background: var(--line); }
 
 .msg { padding: 12px 14px; border-radius: var(--radius-sm); font-size: 0.95rem; margin-bottom: 14px; }
 .msg-error { background: color-mix(in srgb, var(--danger) 12%, transparent); color: var(--danger); }
 .msg-info { background: color-mix(in srgb, var(--moss) 18%, transparent); color: var(--text); }
 .muted { color: var(--muted); }
+.small { font-size: 0.88rem; }
 .lead { color: var(--muted); font-size: 1.05rem; }
 .row { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; }
 .row-end { justify-content: space-between; }

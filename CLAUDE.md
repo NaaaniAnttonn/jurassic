@@ -16,10 +16,11 @@ Interface et code commentés **en français**. Le README détaille la mise en pl
 - `src/App.tsx` : session → espace couple → coque à onglets (`/agenda`, `/listes`, `/taches`, `/reglages`).
 - `src/context/` : `AuthContext` (session) et `SpaceContext` (espace + profils, temps réel).
 - `src/lib/` : client Supabase + `errorMessage()`, notifications push (`push.ts`), détection iOS/standalone.
-- `src/modules/<fonctionnalité>/` : un dossier par fonctionnalité (CSS propre au module).
+- `src/modules/<fonctionnalité>/` : un dossier par fonctionnalité (CSS propre au module ; les classes
+  partagées — `.btn*`, `.icon-btn`, `.card`, `.field`, `.small` — vont dans `src/index.css`).
 - `src/sw.ts` : service worker maison (vite-plugin-pwa en `injectManifest`) : cache + réception des push.
 - `supabase/migrations/` : SQL numéroté, exécuté **à la main** dans le SQL Editor.
-- `supabase/functions/` : Edge Functions Deno (`send-push`, `send-reminders`, `calendar-feed`, `sync-calendars`),
+- `supabase/functions/` : Edge Functions Deno (`send-push`, `send-reminders` [+ récap des listes], `calendar-feed`, `sync-calendars`),
   déployées avec `npx supabase functions deploy <nom> --use-api` (`--no-verify-jwt` sauf `send-push`).
 
 ## Modèle et conventions
@@ -47,7 +48,12 @@ Interface et code commentés **en français**. Le README détaille la mise en pl
      affiche « Occupé ». Ne jamais remettre ces champs dans `external_events` (lisible par l'autre).
    - Côté client, les `external_events` deviennent des `CalEvent` avec `external` (fiche en lecture seule).
    - Code iCal pur dans `*/ics.ts` (testable avec Node + esbuild), fuseau Paris dans `_shared/paris.ts`.
-4. **Listes** et **Tâches** : encore des pages vides (`modules/listes`, `modules/todo`).
+4. **Listes** (migration 0007) : `lists` + `list_items` (`space_id` dupliqué pour la RLS et le filtre temps réel).
+   Liste « Courses » créée d'office (trigger sur `spaces`). Ordre manuel : `position` flottante, on insère
+   à mi-chemin entre les voisins (`modules/listes/useDragSort.ts`, sans bibliothèque). Notification groupée :
+   `notified = false` sur chaque ajout ; `send-reminders/lists.ts` envoie un récapitulatif 3 min après le
+   dernier ajout d'une personne dans une liste, ou le bouton « Prévenir » le fait tout de suite.
+5. **Tâches** : encore une page vide (`modules/todo`).
 
 ## Points d'attention
 - Ne jamais commit le vrai `CRON_SECRET` : `0003_rappels_cron.sql` et `0005_synchro_cron.sql` gardent
