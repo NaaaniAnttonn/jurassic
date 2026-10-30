@@ -2,19 +2,21 @@ import { useState } from 'react'
 import { useSpace } from '../../context/SpaceContext'
 import { IconChevronRight, IconHeart } from '../../components/Icons'
 import { toDateInput } from '../agenda/dates'
-import { daysBetween, elapsed, fmtElapsedShort, fmtIn, nextAnniversary } from './dates'
+import { daysBetween, elapsed, fmtElapsedShort, nextAnniversary } from './dates'
 import { useCountdowns } from './useCountdowns'
 import CountersSheet from './CountersSheet'
 import './compteurs.css'
 
-/** Bande discrète en haut de l'agenda : temps ensemble et prochaine date importante */
+/** Bande discrète en haut de l'agenda : temps ensemble et toutes les dates importantes à venir */
+/** « aujourd'hui », « demain », « 23 j » */
+const shortIn = (n: number) => (n === 0 ? 'aujourd’hui' : n === 1 ? 'demain' : `${n} j`)
+
 export default function CountersBand() {
   const { space } = useSpace()
   const { countdowns, reload } = useCountdowns()
   const [open, setOpen] = useState(false)
   const today = toDateInput(new Date())
   const metOn = space?.met_on ?? null
-  const next = countdowns[0]
 
   let together: string | null = null
   if (metOn && metOn <= today) {
@@ -27,15 +29,19 @@ export default function CountersBand() {
 
   return (
     <>
-      <button className={`counters-band${together || next ? '' : ' is-empty'}`} onClick={() => setOpen(true)}>
+      <button className={`counters-band${together || countdowns.length ? '' : ' is-empty'}`} onClick={() => setOpen(true)}>
         <IconHeart size={18} />
         <span className="counters-band-text">
-          {together || next ? (
+          {together || countdowns.length ? (
             <>
-              {together && <span>{together}</span>}
-              {next && (
-                <span>
-                  {next.title} {fmtIn(daysBetween(today, next.date))}
+              {together && <span className="counters-band-together">{together}</span>}
+              {countdowns.length > 0 && (
+                <span className="counters-band-chips">
+                  {countdowns.map((c) => (
+                    <span key={c.id} className="counters-chip">
+                      {c.title} · <strong>{shortIn(daysBetween(today, c.date))}</strong>
+                    </span>
+                  ))}
                 </span>
               )}
             </>

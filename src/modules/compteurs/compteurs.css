@@ -15,9 +15,22 @@
 }
 .counters-band > svg:first-child { color: var(--danger); flex: none; }
 .counters-band > svg:last-child { color: var(--muted); flex: none; }
-.counters-band-text { flex: 1; min-width: 0; display: flex; flex-wrap: wrap; gap: 0 12px; font-size: 0.9rem; font-weight: 600; }
-.counters-band-text span { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 100%; }
-.counters-band-text span + span { color: var(--muted); }
+.counters-band-text { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 6px; font-size: 0.9rem; font-weight: 600; }
+.counters-band-together { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+/* Une pastille par compte à rebours ; elles passent à la ligne s'il y en a beaucoup */
+.counters-band-chips { display: flex; flex-wrap: wrap; gap: 5px; }
+.counters-chip {
+  max-width: 100%;
+  padding: 2px 9px;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--amber) 22%, var(--surface));
+  font-size: 0.8rem;
+  font-weight: 600;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.counters-chip strong { font-weight: 800; }
 .counters-band.is-empty { background: transparent; border-style: dashed; }
 .counters-band.is-empty .counters-band-text { color: var(--muted); font-weight: 500; }
 
